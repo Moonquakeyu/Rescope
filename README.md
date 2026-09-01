@@ -4,6 +4,20 @@ RelScope learns the boundary regions that govern a prespecified local measuremen
 
 This repository accompanies **“Learning measurement-critical geometry beyond global segmentation accuracy for reliable 3D anatomical quantification.”** The manuscript-facing method name is **RelScope**. The Python package and checkpoint-compatible class retain the development name `relmeasure3d.PublicationRelMeasure3D`.
 
+## Why RelScope?
+
+Global segmentation quality is an imperfect surrogate for a measurement governed by a small local part of a boundary. RelScope therefore learns two complementary objects for a predefined anatomical relation:
+
+1. continuous surface fields for the paired structures; and
+2. bilateral critical distributions that localize the regions controlling their distance.
+
+The distributions pool local features from both structures into a relation representation, from which the model predicts distance and a case-dependent scale. Each relation is trained with its own checkpoint; the released implementation is not a multi-query model.
+
+```text
+3D relation crop → residual 3D U-Net → surface fields + critical distributions
+                 → bilateral relational pooling → distance + scale
+```
+
 ## Repository contents
 
 ```text
@@ -130,6 +144,16 @@ Additional scripts reproduce the controlled perturbation, segmentation-measureme
 - `configs/patterns_experiments.json` records the seeds, optimization schedule, crop sizes, batch sizes, loss weights, and validation-selected segmentation pipelines.
 
 See [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) for the end-to-end order and [docs/DATA.md](docs/DATA.md) for dataset layout assumptions.
+
+## Evaluation settings
+
+| Public dataset | Anatomical relation | Role in the study |
+|---|---|---|
+| ToothFairy3 | Tooth–inferior alveolar nerve | Primary in-domain and scanner hold-out evaluation |
+| ToothFairy3 | Tooth–maxillary sinus | Fixed test and 5-fold × 3-seed out-of-fold evaluation |
+| TotalSegmentator v1 | Pancreas–aorta | Additional in-domain setting and source domain for locked transfer |
+| AMOS22 | Pancreas–aorta | Additional in-domain setting and target domain for locked transfer |
+| Medical Segmentation Decathlon Task08 | Tumour–hepatic vessel | Contact-dominated applicability-boundary setting |
 
 ## Citation
 
