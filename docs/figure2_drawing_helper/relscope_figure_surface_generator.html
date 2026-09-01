@@ -1,0 +1,1268 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>RelScope Figure Surface Generator</title>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.179.1/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.179.1/examples/jsm/"
+  }
+}
+</script>
+
+<style>
+:root{
+  --bg:#f5f6f8; --panel:#fff; --line:#d9dee6; --text:#19212b;
+  --muted:#6d7682; --blue:#2456d8;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);background:var(--bg)}
+#app{height:100%;display:grid;grid-template-columns:330px 1fr;overflow:hidden}
+aside{background:#fff;border-right:1px solid var(--line);padding:17px;overflow:auto}
+main{position:relative;min-width:0}
+canvas{display:block;width:100%;height:100%;touch-action:none}
+h1{font-size:18px;margin:0 0 5px}
+.sub{font-size:12px;line-height:1.45;color:var(--muted);margin-bottom:14px}
+.sec{border-top:1px solid var(--line);padding-top:13px;margin-top:13px}
+.st{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+button{
+  border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--text);
+  padding:8px 9px;font-weight:650;cursor:pointer;font-size:12px
+}
+button:hover{border-color:#aeb7c2}
+button.active{background:var(--blue);border-color:var(--blue);color:#fff}
+button.warn{color:#a42b2b}
+label{display:block;font-size:12px;color:var(--muted);margin:9px 0 5px}
+input[type=range]{width:100%}
+input[type=color]{width:100%;height:34px;border:1px solid var(--line);border-radius:8px;background:#fff;padding:3px}
+.val{float:right;color:var(--text);font-variant-numeric:tabular-nums}
+.check{display:flex;align-items:center;gap:8px;color:var(--text);font-size:12px;margin:8px 0}
+.check input{width:auto}
+.small{font-size:11px;color:var(--muted);line-height:1.45}
+#badge{
+  position:absolute;left:18px;top:16px;padding:9px 11px;border:1px solid var(--line);
+  background:rgba(255,255,255,.93);border-radius:10px;font-size:12px;line-height:1.45;
+  box-shadow:0 5px 22px rgba(0,0,0,.05);backdrop-filter:blur(8px);pointer-events:none
+}
+#status{
+  position:absolute;left:18px;bottom:16px;background:rgba(25,33,43,.86);color:#fff;
+  border-radius:8px;padding:7px 10px;font-size:11px;pointer-events:none
+}
+#legend{
+  position:absolute;right:18px;bottom:16px;background:rgba(255,255,255,.94);
+  border:1px solid var(--line);border-radius:10px;padding:9px 10px;width:180px;
+  font-size:11px;display:none
+}
+#grad{height:10px;border-radius:6px;margin:6px 0;background:linear-gradient(90deg,#6f3fa0,#ef7041,#ffd166)}
+#legend .ends{display:flex;justify-content:space-between;color:var(--muted)}
+@media(max-width:850px){
+  #app{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+  aside{max-height:46vh;border-right:0;border-bottom:1px solid var(--line)}
+}
+</style>
+</head>
+
+<body>
+<div id="app">
+<aside>
+  <h1>RelScope Figure Surface Generator</h1>
+  <div class="sub">
+    这里生成一对相向的、脑回式结节闭合曲面（通用示意，非患者解剖），
+    包括 gap、局部界面、heatmap、critical region 和 relational pooling。
+  </div>
+
+  <div class="sec">
+    <div class="st">One-click figure presets</div>
+    <div class="grid2">
+      <button class="preset active" data-preset="pair">A/B pair</button>
+      <button class="preset" data-preset="field">Surface fields</button>
+      <button class="preset" data-preset="critical">Critical heatmap</button>
+      <button class="preset" data-preset="pooling">Relational pooling</button>
+      <button class="preset" data-preset="changed">Local-change case</button>
+      <button class="preset" data-preset="tooth">Tooth–nerve 3D</button>
+      <button id="closeupBtn">Interface close-up</button>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">Geometry</div>
+
+    <label>A–B base gap (separation) <span class="val" id="gapV"></span></label>
+    <input id="gap" type="range" min="0.20" max="1.25" step="0.01" value="0.58">
+    <div class="small">Controls the nominal gap between Structure A and Structure B; local relief then creates the visible near/far variation.</div>
+
+    <label>Local boundary deformation <span class="val" id="changeV"></span></label>
+    <input id="change" type="range" min="-0.15" max="0.55" step="0.01" value="0.08">
+
+    <label>Interface waviness <span class="val" id="waveV"></span></label>
+    <input id="wave" type="range" min="0.00" max="0.40" step="0.01" value="0.16">
+
+    <label>Structure A surface relief <span class="val" id="reliefAV"></span></label>
+    <input id="reliefA" type="range" min="0.00" max="0.32" step="0.01" value="0.16">
+
+    <label>Structure B surface relief <span class="val" id="reliefBV"></span></label>
+    <input id="reliefB" type="range" min="0.00" max="0.32" step="0.01" value="0.16">
+
+    <label>Relief frequency <span class="val" id="reliefFreqV"></span></label>
+    <input id="reliefFreq" type="range" min="0.65" max="2.40" step="0.05" value="1.35">
+
+    <label>Blob lobulation <span class="val" id="lobesV"></span></label>
+    <input id="lobes" type="range" min="0.00" max="0.48" step="0.01" value="0.34">
+
+    <label>Body thickness <span class="val" id="thickV"></span></label>
+    <input id="thick" type="range" min="0.35" max="1.40" step="0.01" value="0.78">
+
+    <label>Shape seed <span class="val" id="seedV"></span></label>
+    <input id="seed" type="range" min="1" max="25" step="1" value="7">
+
+    <div class="grid2" style="margin-top:9px">
+      <button id="regenBtn">Regenerate pair</button>
+      <button id="swapBtn">New shape seed</button>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="st">Critical region</div>
+
+    <label>Critical Y <span class="val" id="critYV"></span></label>
+    <input id="critY" type="range" min="-0.70" max="0.70" step="0.01" value="-0.05">
+
+    <label>Critical Z <span class="val" id="critZV"></span></label>
+    <input id="critZ" type="range" min="-0.70" max="0.70" step="0.01" value="0.10">
+
+    <label>Region radius <span class="val" id="critRV"></span></label>
+    <input id="critR" type="range" min="0.18" max="0.80" step="0.01" value="0.42">
+
+    <label>SDF shell scale <span class="val" id="sdfSizeV"></span></label>
+    <input id="sdfSize" type="range" min="0.75" max="1.35" step="0.01" value="1.00">
+  </div>
+
+  <div class="sec">
+    <div class="st">Display</div>
+    <div class="grid3" style="margin-bottom:9px">
+      <button id="onlyABtn">Show only A</button>
+      <button id="onlyBBtn">Show only B</button>
+      <button id="showBothBtn" class="active">Show A + B</button>
+    </div>
+    <div class="grid2">
+      <div><label style="margin-top:0">Structure A</label><input id="colorA" type="color" value="#e77e69"></div>
+      <div><label style="margin-top:0">Structure B</label><input id="colorB" type="color" value="#55b8c9"></div>
+    </div>
+
+    <label class="check"><input id="showA" type="checkbox" checked> Show Structure A</label>
+    <label class="check"><input id="showB" type="checkbox" checked> Show Structure B</label>
+    <label class="check"><input id="showSDF" type="checkbox" checked> Show truncated SDF targets</label>
+    <label class="check"><input id="showCritical" type="checkbox"> Critical distributions (πA, πB)</label>
+    <label class="check"><input id="showBands" type="checkbox"> Critical-band targets</label>
+    <label class="check"><input id="showHeat" type="checkbox"> Distance / critical heatmap</label>
+    <label class="check"><input id="showGap" type="checkbox" checked> Reference surface distance d*</label>
+    <label class="check"><input id="showLinks" type="checkbox"> Relational pooling links</label>
+    <label class="check"><input id="showWire" type="checkbox"> Surface mesh</label>
+    <label class="check"><input id="showBoundary" type="checkbox" checked> Facing-boundary curves</label>
+  </div>
+
+  <div class="sec">
+    <div class="st">Export</div>
+    <div class="grid2">
+      <button id="pngBtn">Export 2× PNG</button>
+      <button id="svgBtn">Export vector SVG</button>
+      <button id="objBtn">Export OBJ</button>
+      <button id="resetViewBtn">Reset camera</button>
+    </div>
+    <div class="small" style="margin-top:8px">
+      PNG 会以透明背景导出；SVG 是当前视角的真实三角面矢量投影，不是 Image Trace。
+      如果最终用于 graphical abstract，可在 Illustrator 中继续加文字、箭头和框。
+    </div>
+  </div>
+</aside>
+
+<main id="viewWrap">
+  <canvas id="c"></canvas>
+  <div id="badge"><b id="presetTitle">A/B generic boundary pair</b><br><span id="presetDesc">Generic schematic surfaces — no patient anatomy.</span></div>
+  <div id="status">Ready.</div>
+  <div id="legend">
+    <b>Relational surface field</b>
+    <div id="grad"></div>
+    <div class="ends"><span>far / low</span><span>near / critical</span></div>
+  </div>
+</main>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { OBJExporter } from 'three/addons/exporters/OBJExporter.js';
+
+const $ = id => document.getElementById(id);
+const canvas = $('c');
+const wrap = $('viewWrap');
+const statusEl = $('status');
+
+// Keep the WebGL drawing buffer transparent so exported PNGs can be placed
+// directly onto slides and figures without a rectangular background.
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true, preserveDrawingBuffer:true,alpha:true});
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setClearColor(0x000000,0);
+
+const scene = new THREE.Scene();
+scene.background = null;
+
+const camera = new THREE.PerspectiveCamera(34,1,0.01,100);
+const controls = new OrbitControls(camera,canvas);
+controls.enableDamping=true;
+controls.minDistance=4.0;
+controls.maxDistance=14.0;
+
+function resetCamera(){
+  camera.position.set(0.15,0.20,8.2);
+  controls.target.set(0,0,0);
+  controls.update();
+}
+resetCamera();
+
+scene.add(new THREE.HemisphereLight(0xffffff,0xc7d0da,2.35));
+const key = new THREE.DirectionalLight(0xffffff,3.25);
+key.position.set(-3.5,5.2,7.0);
+scene.add(key);
+const rim = new THREE.DirectionalLight(0xcfeeff,1.25);
+rim.position.set(5,-1,-3);
+scene.add(rim);
+
+const pairGroup = new THREE.Group();
+pairGroup.rotation.y = -0.33;
+pairGroup.rotation.x = 0.04;
+scene.add(pairGroup);
+
+const overlayGroup = new THREE.Group();
+pairGroup.add(overlayGroup);
+
+let meshA=null, meshB=null;
+let wireA=null, wireB=null;
+let boundaryA=null, boundaryB=null;
+let gapLine=null;
+let poolLines=[];
+let sdfTargets=[];
+let criticalTargets=[];
+let anatomyGroup=null;
+let preset='pair';
+
+const state = {
+  gap:0.58,
+  change:0.08,
+  wave:0.16,
+  reliefA:0.16,
+  reliefB:0.16,
+  reliefFreq:1.35,
+  lobes:0.34,
+  thick:0.78,
+  seed:7,
+  critY:-0.05,
+  critZ:0.10,
+  critR:0.42,
+  sdfSize:1.00,
+  colorA:'#e77e69',
+  colorB:'#55b8c9'
+};
+
+function hash(seed,x){
+  const v=Math.sin(seed*91.713 + x*117.23)*43758.5453;
+  return v-Math.floor(v);
+}
+function smoothstep(a,b,x){
+  let t=THREE.MathUtils.clamp((x-a)/(b-a),0,1);
+  return t*t*(3-2*t);
+}
+
+function outlineRadius(theta, side){
+  const s=state.seed + (side==='A'?0:19);
+  const n1=(hash(s,1)-0.5)*0.13;
+  const n2=(hash(s,2)-0.5)*0.10;
+  const n3=(hash(s,3)-0.5)*0.08;
+  // A band-limited scalloped contour creates the rounded, clustered outline
+  // of a soft-tissue/brain-like blob rather than a flat plate silhouette.
+  const phase=hash(s,7)*Math.PI*2;
+  const lobes=state.lobes*(
+    0.58*Math.sin(7*theta+phase)+
+    0.30*Math.cos(11*theta-0.55*phase)+
+    0.16*Math.sin(15*theta+0.9)
+  );
+  return Math.max(0.60,1
+    + n1*Math.sin(2*theta+0.7)
+    + n2*Math.cos(3*theta-0.25)
+    + n3*Math.sin(5*theta+1.2)
+    + (side==='A'?0.035:-0.025)*Math.cos(theta-0.3)
+    + lobes);
+}
+
+function gapField(ny,nz){
+  const r2=((ny-state.critY)/state.critR)**2 + ((nz-state.critZ)/(state.critR*0.88))**2;
+  const local=Math.exp(-2.0*r2);
+  const broad=0.035*Math.sin(2.2*ny-0.6)*Math.cos(1.8*nz+0.4);
+  return Math.max(0.10, state.gap + broad - state.change*local);
+}
+
+function commonMid(ny,nz){
+  return state.wave*(
+    0.42*Math.sin(2.35*ny+0.4)
+    +0.28*Math.cos(2.8*nz-0.7)
+    +0.16*Math.sin(2.1*(ny+nz))
+  );
+}
+
+function interfaceRelief(ny,nz,side){
+  // A zero-mean, multi-scale field makes each facing surface visibly pitted
+  // rather than merely tilting a flat plane.  The two seeds/phases are
+  // deliberately different so the surfaces can be tuned independently.
+  const isA=side==='A';
+  const s=state.seed+(isA?41:67);
+  const f=state.reliefFreq;
+  const amp=isA?state.reliefA:state.reliefB;
+  const phase=hash(s,8)*Math.PI*2;
+  const ripple=
+    0.50*Math.sin(f*(4.1*ny+1.15*nz)+phase)+
+    0.31*Math.cos(f*(1.25*ny-4.55*nz)-0.6*phase)+
+    0.19*Math.sin(f*(5.6*ny-3.15*nz)+1.1);
+  const pit1=-0.58*Math.exp(-((ny-(isA?0.30:-0.24))**2/0.10+(nz-(isA?-0.23:0.27))**2/0.075));
+  const pit2= 0.42*Math.exp(-((ny+(isA?0.37:-0.34))**2/0.055+(nz-(isA?0.30:-0.25))**2/0.11));
+  return amp*(ripple+pit1+pit2);
+}
+
+function interfaceGeometry(ny,nz){
+  const nominalGap=gapField(ny,nz);
+  let a=interfaceRelief(ny,nz,'A');
+  let b=interfaceRelief(ny,nz,'B');
+
+  // When both local bumps approach one another, scale only that approach so
+  // the surfaces remain opaque, separate solids instead of intersecting.
+  const approach=a+b;
+  const minGap=0.055;
+  if(approach>nominalGap-minGap){
+    const scale=Math.max(0,(nominalGap-minGap)/approach);
+    a*=scale;
+    b*=scale;
+  }
+  return {a,b,nominalGap,g:Math.max(minGap,nominalGap-a-b)};
+}
+
+function bodyBulge(ny,nz,side){
+  const s=state.seed+(side==='A'?4:29);
+  const irr =
+    0.08*Math.sin((2.0+hash(s,5))*ny*2.2 + 1.1) +
+    0.06*Math.cos((2.2+hash(s,6))*nz*2.0 - 0.6) +
+    0.035*Math.sin(3.1*(ny-nz));
+  const center=Math.exp(-0.8*(ny*ny+nz*nz));
+  return state.thick*(0.78+0.25*center+irr);
+}
+
+function blobDimensions(side){
+  return {
+    x:0.44+0.40*state.thick,
+    y:side==='A'?1.16:1.08,
+    z:side==='A'?0.86:0.94
+  };
+}
+
+function blobLump(dx,dy,dz,side){
+  const s=state.seed+(side==='A'?53:79);
+  const phase=hash(s,9)*Math.PI*2;
+  const field=
+    0.40*Math.sin(4.1*dx+3.4*dy+2.1*dz+phase)+
+    0.29*Math.cos(2.3*dx-5.2*dz-0.65*phase)+
+    0.20*Math.sin(5.3*dy-3.8*dz+0.8)+
+    0.11*Math.cos(7.0*(dx-dy)+2.5*dz)+
+    0.13*Math.sin(8.6*dx-6.2*dy+3.7*dz-0.4)+
+    0.08*Math.cos(10.5*dz+4.6*dy+0.3*phase);
+  return THREE.MathUtils.clamp(1+state.lobes*field,0.70,1.32);
+}
+
+function blobPoint(side,dx,dy,dz){
+  const d=blobDimensions(side);
+  const lobe=blobLump(dx,dy,dz,side);
+  const ny=dy*lobe, nz=dz*lobe;
+  const sign=side==='A'?-1:1;
+  const centerX=sign*(d.x+state.gap/2);
+  let x=centerX+d.x*dx*lobe;
+
+  // A local inward bulge keeps the existing deformation and gap controls
+  // meaningful on the new organic solids.
+  const r2=((ny-state.critY)/state.critR)**2+((nz-state.critZ)/(state.critR*.88))**2;
+  const towardCenter=Math.max(0,side==='A'?dx:-dx);
+  const safeShift=Math.min(state.change*.24,Math.max(0,(state.gap-.055)/2));
+  x+=-sign*safeShift*Math.exp(-2*r2)*towardCenter;
+
+  return {
+    x,
+    y:d.y*dy*lobe,
+    z:d.z*dz*lobe,
+    ny,nz,
+    g:gapField(ny,nz),
+    front:side==='A'?dx>0:dx<0
+  };
+}
+
+function radialProgress(ny,nz,side){
+  const r=Math.hypot(ny,nz);
+  if(r<1e-6) return 0;
+  return Math.min(1,r/outlineRadius(Math.atan2(nz,ny),side));
+}
+
+function blobSurfaceX(side,front,ny,nz,q,rel,m){
+  const xFacing=side==='A'
+    ?m-rel.nominalGap/2+rel.a
+    :m+rel.nominalGap/2-rel.b;
+  const t=bodyBulge(ny,nz,side);
+  // The two discs taper to one rounded rim, turning the old slab into a
+  // compact closed blob while preserving a clearly readable A–B separation.
+  const taper=0.5*t*Math.min(1,q*q);
+  if(side==='A') return front ? xFacing-taper : xFacing-t+taper;
+  return front ? xFacing+taper : xFacing+t-taper;
+}
+
+function baseColor(side){
+  return new THREE.Color(side==='A'?state.colorA:state.colorB);
+}
+function heatColor(g){
+  // smaller gap -> yellow; larger -> purple
+  const near = new THREE.Color('#ffd166');
+  const mid  = new THREE.Color('#ef7041');
+  const far  = new THREE.Color('#6f3fa0');
+  const lo=Math.max(0.10,state.gap-state.change-0.03);
+  const hi=state.gap+0.12;
+  let t=THREE.MathUtils.clamp((g-lo)/(hi-lo),0,1);
+  if(t<0.52) return near.clone().lerp(mid,t/0.52);
+  return mid.clone().lerp(far,(t-0.52)/0.48);
+}
+
+function buildStructure(side){
+  const SEG=64, RINGS=34;
+  const vertices=[];
+  const params=[]; // ny,nz,g,frontFlag
+  const indices=[];
+
+  // A closed, lumpy UV surface: this replaces the former paired discs with
+  // compact 3D anatomy-like blobs, similar to the supplied reference.
+  for(let r=0;r<=RINGS;r++){
+    const u=r/RINGS*Math.PI;
+    const su=Math.sin(u), cy=Math.cos(u);
+    for(let j=0;j<=SEG;j++){
+      const phi=j/SEG*Math.PI*2;
+      const p=blobPoint(side,su*Math.cos(phi),cy,su*Math.sin(phi));
+      vertices.push(p.x,p.y,p.z);
+      params.push(p.ny,p.nz,p.g,p.front?1:0);
+    }
+  }
+  for(let r=0;r<RINGS;r++){
+    for(let j=0;j<SEG;j++){
+      const a=r*(SEG+1)+j, b=a+SEG+1, c=a+1, d=b+1;
+      indices.push(a,c,b,c,d,b);
+    }
+  }
+
+  const g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));
+  g.setIndex(indices);
+  g.computeVertexNormals();
+
+  const color=new Float32Array((vertices.length/3)*3);
+  g.setAttribute('color',new THREE.BufferAttribute(color,3));
+  g.userData.params=params;
+  g.userData.faceCount=(RINGS+1)*(SEG+1);
+  g.userData.seg=SEG;
+  g.userData.rings=RINGS;
+
+  const mat=new THREE.MeshStandardMaterial({
+    color:0xffffff,vertexColors:true,roughness:0.66,metalness:0,
+    side:THREE.DoubleSide,transparent:false,opacity:1,depthWrite:true
+  });
+  const mesh=new THREE.Mesh(g,mat);
+  mesh.name='Structure '+side;
+  updateMeshColors(mesh,side);
+  return mesh;
+}
+
+function updateMeshColors(mesh,side){
+  const p=mesh.geometry.userData.params;
+  const attr=mesh.geometry.getAttribute('color');
+  const base=baseColor(side);
+  const dark=base.clone().multiplyScalar(0.72);
+  const light=base.clone().lerp(new THREE.Color('#ffffff'),0.14);
+
+  const heat=$('showHeat').checked;
+
+  for(let i=0;i<attr.count;i++){
+    const ny=p[i*4], nz=p[i*4+1], g=p[i*4+2], front=p[i*4+3]===1;
+    let c;
+    // Map the relational field across the complete, opaque closed shell.
+    // From an oblique camera view this keeps Structure B's visible outer
+    // side coloured as well, instead of exposing a misleading plain-blue cap.
+    if(heat){
+      c=heatColor(g);
+    }else if(front){
+      const illum=THREE.MathUtils.clamp(0.58+0.22*(-ny)+0.16*nz,0,1);
+      c=dark.clone().lerp(light,illum);
+    }else{
+      const illum=THREE.MathUtils.clamp(0.42+0.18*(-ny)+0.12*nz,0,1);
+      c=dark.clone().lerp(base,illum);
+    }
+    attr.setXYZ(i,c.r,c.g,c.b);
+  }
+  attr.needsUpdate=true;
+}
+
+function clearPair(){
+  for(const x of [meshA,meshB,wireA,wireB,boundaryA,boundaryB,gapLine]){
+    if(x && x.parent) x.parent.remove(x);
+  }
+  for(const l of poolLines) if(l.parent) l.parent.remove(l);
+  poolLines=[];
+  for(const t of sdfTargets) if(t.parent) t.parent.remove(t);
+  sdfTargets=[];
+  for(const t of criticalTargets) if(t.parent) t.parent.remove(t);
+  criticalTargets=[];
+  if(anatomyGroup && anatomyGroup.parent) anatomyGroup.parent.remove(anatomyGroup);
+  anatomyGroup=null;
+}
+
+function makeTextSprite(text,{color='#23313d',width=1.0,font=42}={}){
+  const textCanvas=document.createElement('canvas');
+  textCanvas.width=768;textCanvas.height=112;
+  const ctx=textCanvas.getContext('2d');
+  ctx.font=`600 ${font}px Inter, Arial, sans-serif`;
+  ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=color;
+  ctx.fillText(text,textCanvas.width/2,textCanvas.height/2);
+  const texture=new THREE.CanvasTexture(textCanvas);
+  texture.colorSpace=THREE.SRGBColorSpace;
+  const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,transparent:true,depthTest:false}));
+  sprite.scale.set(width,width*112/768,1);
+  sprite.renderOrder=30;
+  return sprite;
+}
+
+function makeZeroLevelMaterial(){
+  return new THREE.ShaderMaterial({
+    vertexShader:`varying vec3 vNormal; varying vec3 vView; void main(){vNormal=normalize(normalMatrix*normal);vec4 p=modelViewMatrix*vec4(position,1.0);vView=normalize(-p.xyz);gl_Position=projectionMatrix*p;}`,
+    fragmentShader:`varying vec3 vNormal; varying vec3 vView; void main(){float rim=pow(1.0-max(dot(normalize(vNormal),normalize(vView)),0.0),2.4);gl_FragColor=vec4(vec3(1.0),0.92*rim);}`,
+    transparent:true,depthWrite:false,side:THREE.DoubleSide
+  });
+}
+
+function makeConformalSDFOverlay(mesh,side){
+  mesh.geometry.computeBoundingBox();
+  const box=mesh.geometry.boundingBox;
+  const center=box.getCenter(new THREE.Vector3());
+  const size=box.getSize(new THREE.Vector3());
+  const group=new THREE.Group();
+  group.name='SDF channel '+side;group.userData.side=side;
+  const outerColor=side==='A'?0xffc5b8:0xbceef6;
+  const shellScale=1+(state.sdfSize-1)*.24;
+
+  function scaledShell(scale,material,order){
+    const shell=new THREE.Mesh(mesh.geometry,material);
+    shell.scale.setScalar(scale);
+    shell.position.copy(center).multiplyScalar(1-scale);
+    shell.renderOrder=order;
+    group.add(shell);
+  }
+
+  // Two smooth, shape-conformal positive-distance shells imply φ > 0 without
+  // introducing boxes, voxel grids, or categorical masks.
+  scaledShell(1.045*shellScale,new THREE.MeshBasicMaterial({color:outerColor,transparent:true,opacity:.18,depthWrite:false,side:THREE.DoubleSide}),4);
+  scaledShell(1.105*shellScale,new THREE.MeshBasicMaterial({color:outerColor,transparent:true,opacity:.07,depthWrite:false,side:THREE.DoubleSide}),3);
+
+  // φ = 0 is a crisp white rim directly on the original continuous surface.
+  const zeroSurface=new THREE.Mesh(mesh.geometry,makeZeroLevelMaterial());
+  zeroSurface.renderOrder=12;group.add(zeroSurface);
+
+  const label=makeTextSprite(`φ*${side}`,{color:side==='A'?'#a83d30':'#087d97',width:.36,font:118});
+  label.position.set(center.x,box.max.y+.13,center.z+size.z*.28);group.add(label);
+  return group;
+}
+
+function makeSDFLegend(){
+  const legend=makeTextSprite('−τ  inside   ·   0  surface   ·   +τ  outside',{color:'#53626f',width:1.24,font:27});
+  legend.name='SDF legend';legend.position.set(0,-1.48,.34);legend.renderOrder=30;
+  return legend;
+}
+
+function makeSoftHotspotTexture(){
+  const hotspotCanvas=document.createElement('canvas');
+  hotspotCanvas.width=hotspotCanvas.height=256;
+  const ctx=hotspotCanvas.getContext('2d');
+  const c=128;
+  const gradient=ctx.createRadialGradient(c,c,0,c,c,120);
+  gradient.addColorStop(0,'rgba(255,255,255,1)');
+  gradient.addColorStop(.14,'rgba(255,255,255,.96)');
+  gradient.addColorStop(.38,'rgba(255,255,255,.48)');
+  gradient.addColorStop(.72,'rgba(255,255,255,.13)');
+  gradient.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=gradient;ctx.fillRect(0,0,256,256);
+  return new THREE.CanvasTexture(hotspotCanvas);
+}
+
+function makeCriticalDistribution(side){
+  const group=new THREE.Group();
+  group.name='Critical distribution '+side;group.userData.side=side;
+  const p=frontPoint(side,state.critY,state.critZ);
+  p.x+=side==='A'?0.045:-0.045;
+  const colors=side==='A'?[0xff8d17,0xffb21c,0xffdf4e,0xffffb0]:[0x00aaa9,0x00c8bd,0x32e0c9,0xb8fff0];
+  const texture=makeSoftHotspotTexture();
+  const base=state.critR*1.88;
+  // Four smooth, nested translucent layers express local probability mass.
+  for(let i=0;i<4;i++){
+    const spot=new THREE.Sprite(new THREE.SpriteMaterial({
+      map:texture,color:colors[i],transparent:true,opacity:.32+.15*i,
+      depthTest:false,depthWrite:false
+    }));
+    const s=base*(1.28-.22*i);
+    spot.scale.set(s,s,1);spot.position.copy(p);spot.renderOrder=35+i;
+    group.add(spot);
+  }
+  const center=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,color:0xffffff,transparent:true,opacity:1,depthTest:false,depthWrite:false}));
+  center.scale.set(.145,.145,1);center.position.copy(p);center.renderOrder=42;group.add(center);
+  const mu=makeTextSprite(`μ${side}`,{color:side==='A'?'#c76100':'#008f91',width:.34,font:180});
+  mu.position.copy(p).add(new THREE.Vector3(side==='A'?-0.11:0.11,.24,.14));group.add(mu);
+  const pi=makeTextSprite(`π${side}`,{color:side==='A'?'#cf5b00':'#008c98',width:.26,font:165});
+  pi.position.copy(p).add(new THREE.Vector3(0,-.24,.14));group.add(pi);
+  return {group,center:p};
+}
+
+function makeCriticalBands(){
+  const bandGroup=new THREE.Group();
+  bandGroup.name='Critical-band targets';
+  for(const side of ['A','B']){
+    const p=frontPoint(side,state.critY,state.critZ);
+    p.x+=side==='A'?0.052:-0.052;
+    const band=new THREE.Sprite(new THREE.SpriteMaterial({map:makeSoftHotspotTexture(),color:0xffde46,transparent:true,opacity:.94,depthTest:false,depthWrite:false}));
+    band.scale.set(state.critR*1.58,state.critR*.46,1);
+    band.position.copy(p);band.renderOrder=46;bandGroup.add(band);
+  }
+  const note=makeTextSprite('surface voxels within d* + δ',{color:'#75623a',width:.82,font:26});
+  note.position.set(0,-1.22,.38);bandGroup.add(note);
+  return bandGroup;
+}
+
+function makeCriticalOverlay(){
+  const a=makeCriticalDistribution('A'),b=makeCriticalDistribution('B');
+  const group=new THREE.Group();
+  group.name='Normalized critical distributions';
+  group.add(a.group,b.group);
+  const lineGeo=new THREE.BufferGeometry().setFromPoints([a.center,b.center]);
+  const line=new THREE.Line(lineGeo,new THREE.LineDashedMaterial({color:0x303e49,dashSize:.08,gapSize:.055,transparent:true,opacity:.9}));
+  line.computeLineDistances();line.renderOrder=33;group.add(line);
+  const title=makeTextSprite('Normalized critical distributions',{color:'#30414d',width:1.28,font:34});
+  title.position.set(0,1.47,.42);group.add(title);
+  const formula=makeTextSprite('πA(v), πB(v)   ·   Σv π(v) = 1',{color:'#62727c',width:1.06,font:25});
+  formula.position.set(0,1.29,.42);group.add(formula);
+  return {group,bands:makeCriticalBands()};
+}
+
+function makeWire(mesh){
+  const geo=new THREE.WireframeGeometry(mesh.geometry);
+  const mat=new THREE.LineBasicMaterial({color:0x25313d,transparent:true,opacity:0.12});
+  return new THREE.LineSegments(geo,mat);
+}
+
+function frontPoint(side,ny,nz){
+  const q2=Math.min(.985,ny*ny+nz*nz);
+  const xDir=Math.sqrt(1-q2)*(side==='A'?1:-1);
+  const p=blobPoint(side,xDir,ny,nz);
+  return new THREE.Vector3(
+    p.x,p.y,p.z
+  );
+}
+
+function makeFacingBoundary(side){
+  // A curved dashed "governing boundary" line on the facing surface.
+  const pts=[];
+  const n=80;
+  for(let i=0;i<n;i++){
+    const t=i/(n-1);
+    const ny=-0.78 + 1.56*t;
+    const nz=0.18*Math.sin(2.3*ny+0.8)+(side==='A'?-0.04:0.04);
+    const p=frontPoint(side,ny,nz);
+    p.x += side==='A'?0.008:-0.008;
+    pts.push(p);
+  }
+  const geo=new THREE.BufferGeometry().setFromPoints(pts);
+  const mat=new THREE.LineDashedMaterial({
+    color:side==='A'?0x963d35:0x1a6571,
+    dashSize:0.07,gapSize:0.045,transparent:true,opacity:0.92
+  });
+  const line=new THREE.Line(geo,mat);
+  line.computeLineDistances();
+  return line;
+}
+
+function makeMinimumGap(){
+  // p* and q* are the closest pair on the reference label surfaces ∂A, ∂B.
+  const a=frontPoint('A',state.critY,state.critZ);
+  const b=frontPoint('B',state.critY,state.critZ);
+  const group=new THREE.Group();
+  group.name='Reference surface distance';
+  group.userData.points=[a.clone(),b.clone()];
+  const geo=new THREE.BufferGeometry().setFromPoints([a,b]);
+  const line=new THREE.Line(geo,new THREE.LineDashedMaterial({color:0x364550,dashSize:.055,gapSize:.038,transparent:true,opacity:.92}));
+  line.computeLineDistances();group.add(line);
+
+  const direction=b.clone().sub(a);
+  const distance=direction.length();
+  direction.normalize();
+  const arrowLength=Math.max(.025,distance-.025);
+  const arrowA=new THREE.ArrowHelper(direction,a,arrowLength,0x364550,.055,.032);
+  const arrowB=new THREE.ArrowHelper(direction.clone().negate(),b,arrowLength,0x364550,.055,.032);
+  group.add(arrowA,arrowB);
+
+  function pointMarker(point,side){
+    const marker=new THREE.Sprite(new THREE.SpriteMaterial({map:makeSoftHotspotTexture(),color:0xffffff,transparent:true,opacity:1,depthTest:false,depthWrite:false}));
+    marker.scale.set(.13,.13,1);marker.position.copy(point);marker.renderOrder=52;group.add(marker);
+    const surface=makeTextSprite(`∂${side}`,{color:'#495967',width:.36,font:220});
+    surface.position.copy(point).add(new THREE.Vector3(side==='A'?-0.15:0.15,-.19,.14));group.add(surface);
+  }
+  pointMarker(a,'A');pointMarker(b,'B');
+  const mid=a.clone().lerp(b,.5);
+  const dLabel=makeTextSprite('d*',{color:'#9a6813',width:.42,font:250});
+  dLabel.position.copy(mid).add(new THREE.Vector3(0,.14,.16));group.add(dLabel);
+  const caption=makeTextSprite('Reference surface distance  d* (mm)',{color:'#52626d',width:1.08,font:27});
+  caption.position.set(0,-1.30,.38);group.add(caption);
+  return group;
+}
+
+function makePoolingLinks(){
+  const lines=[];
+  const ys=[-0.32,-0.16,0,0.16,0.32];
+  for(let k=0;k<ys.length;k++){
+    const ny=state.critY+ys[k]*state.critR;
+    const nz=state.critZ + 0.18*Math.sin(k*1.35)*state.critR;
+    const a=frontPoint('A',ny,nz);
+    const b=frontPoint('B',ny,nz);
+    const mid=a.clone().lerp(b,0.5);
+    mid.z += 0.10 + 0.035*k;
+    const curve=new THREE.QuadraticBezierCurve3(a,mid,b);
+    const pts=curve.getPoints(28);
+    const geo=new THREE.BufferGeometry().setFromPoints(pts);
+    const mat=new THREE.LineBasicMaterial({
+      color:0xb06bd6,transparent:true,opacity:0.44
+    });
+    lines.push(new THREE.Line(geo,mat));
+  }
+  return lines;
+}
+
+function makeToothNerveModel(){
+  const group=new THREE.Group();
+  group.name='Tooth–nerve anatomy model';
+  const tooth=new THREE.Group();tooth.name='Tooth A';
+  const enamel=new THREE.MeshStandardMaterial({color:0xfff9ea,roughness:.17,metalness:0,envMapIntensity:.35});
+  const dentin=new THREE.MeshStandardMaterial({color:0xe7c58b,roughness:.38,metalness:0});
+  const fissureMat=new THREE.MeshStandardMaterial({color:0xa27642,roughness:.78,metalness:0});
+
+  // A molar crown: wide, nearly rectangular occlusal table tapering into a narrow cervical neck.
+  const crownProfile=[[-.34,.43,.34],[-.24,.53,.43],[-.08,.66,.53],[.14,.74,.60],[.32,.76,.62],[.45,.71,.57],[.53,.56,.46]];
+  const crownSegments=56,crownVertices=[],crownIndices=[];
+  crownProfile.forEach(([y,rx,rz])=>{
+    for(let i=0;i<crownSegments;i++){
+      const a=i/crownSegments*Math.PI*2,c=Math.cos(a),s=Math.sin(a);
+      // Superellipse cross-sections make the occlusal table read as a molar rather than a sphere.
+      crownVertices.push(Math.sign(c)*Math.pow(Math.abs(c),.58)*rx,y,Math.sign(s)*Math.pow(Math.abs(s),.58)*rz);
+    }
+  });
+  for(let j=0;j<crownProfile.length-1;j++) for(let i=0;i<crownSegments;i++){
+    const a=j*crownSegments+i,b=j*crownSegments+(i+1)%crownSegments,c=(j+1)*crownSegments+i,d=(j+1)*crownSegments+(i+1)%crownSegments;
+    crownIndices.push(a,b,c,b,d,c);
+  }
+  const lowerCenter=crownVertices.length/3;crownVertices.push(0,crownProfile[0][0],0);
+  const upperCenter=lowerCenter+1;crownVertices.push(0,crownProfile.at(-1)[0],0);
+  for(let i=0;i<crownSegments;i++){
+    const next=(i+1)%crownSegments;
+    crownIndices.push(lowerCenter,next,i,upperCenter,(crownProfile.length-1)*crownSegments+i,(crownProfile.length-1)*crownSegments+next);
+  }
+  const crownGeometry=new THREE.BufferGeometry();
+  crownGeometry.setAttribute('position',new THREE.Float32BufferAttribute(crownVertices,3));crownGeometry.setIndex(crownIndices);crownGeometry.computeVertexNormals();
+  tooth.add(new THREE.Mesh(crownGeometry,enamel));
+  const collar=new THREE.Mesh(new THREE.CylinderGeometry(.46,.40,.15,48),enamel);
+  collar.scale.z=1.05;collar.position.y=-.38;tooth.add(collar);
+  const cusps=[[-.29,.54,-.21,.165],[.29,.54,-.20,.17],[-.30,.53,.21,.16],[.30,.54,.21,.165],[0,.57,.01,.145]];
+  cusps.forEach(([x,y,z,r])=>{
+    const cusp=new THREE.Mesh(new THREE.SphereGeometry(r,40,28),enamel);
+    cusp.scale.set(.96,.56,.90);cusp.position.set(x,y,z);tooth.add(cusp);
+  });
+  const fissures=[
+    [new THREE.Vector3(-.38,.625,-.03),new THREE.Vector3(0,.592,.02),new THREE.Vector3(.39,.625,.04)],
+    [new THREE.Vector3(-.05,.622,-.30),new THREE.Vector3(0,.590,.01),new THREE.Vector3(.04,.622,.30)]
+  ];
+  fissures.forEach(points=>tooth.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points),36,.018,10,false),fissureMat)));
+
+  // Tapered, divergent roots: reliable native geometry with a soft pointed apex.
+  function taperedRoot(top,length,topRadius,bottomRadius,leanX,leanZ){
+    const root=new THREE.Mesh(new THREE.CylinderGeometry(bottomRadius,topRadius,length,40,12,false),dentin);
+    root.position.copy(top).add(new THREE.Vector3(leanX*.5,-length*.5,leanZ*.5));
+    root.rotation.z=-Math.atan2(leanX,length);
+    root.rotation.x=Math.atan2(leanZ,length);
+    const apex=new THREE.Mesh(new THREE.SphereGeometry(bottomRadius*1.08,24,16),dentin);
+    apex.position.copy(top).add(new THREE.Vector3(leanX,-length,leanZ));
+    const rootGroup=new THREE.Group();rootGroup.add(root,apex);
+    return rootGroup;
+  }
+  const rootA=taperedRoot(new THREE.Vector3(-.25,-.29,.06),1.22,.23,.058,-.27,.08);
+  const rootB=taperedRoot(new THREE.Vector3(.26,-.29,.02),1.13,.22,.055,.13,.07);
+  tooth.add(rootA,rootB);
+  const rootTipGlow=new THREE.Mesh(new THREE.SphereGeometry(.105,24,18),new THREE.MeshBasicMaterial({color:0xff7b43,transparent:true,opacity:.8}));
+  rootTipGlow.position.set(.39,-1.42,.09);tooth.add(rootTipGlow);
+
+  const nerve=new THREE.Group();nerve.name='Nerve B';
+  const nerveCurve=new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-1.72,-1.53,.16),new THREE.Vector3(-.90,-1.67,.10),
+    new THREE.Vector3(0,-1.73,.06),new THREE.Vector3(.92,-1.65,.03),new THREE.Vector3(1.76,-1.45,.08)
+  ]);
+  const nerveOuter=new THREE.Mesh(new THREE.TubeGeometry(nerveCurve,96,.155,18,false),new THREE.MeshStandardMaterial({color:0xd98612,emissive:0x5d2600,emissiveIntensity:.16,roughness:.32}));
+  const nerveCore=new THREE.Mesh(new THREE.TubeGeometry(nerveCurve,96,.072,14,false),new THREE.MeshStandardMaterial({color:0xffcf62,emissive:0x6c3c00,emissiveIntensity:.24,roughness:.26}));
+  nerve.add(nerveOuter,nerveCore);
+  group.add(tooth,nerve);
+  group.userData.tooth=tooth;group.userData.nerve=nerve;
+
+  const toothLabel=makeTextSprite('Tooth  A',{color:'#8a7256',width:.55,font:68});
+  toothLabel.position.set(-.05,1.45,.34);group.add(toothLabel);
+  const nerveLabel=makeTextSprite('Nerve  B',{color:'#a46608',width:.58,font:68});
+  nerveLabel.position.set(1.23,-1.36,.30);group.add(nerveLabel);
+  return group;
+}
+
+function makeToothNerveDistance(){
+  const group=new THREE.Group();group.name='Reference surface distance';
+  const a=new THREE.Vector3(.39,-1.42,.09),b=new THREE.Vector3(.39,-1.70,.06);
+  group.userData.points=[a.clone(),b.clone()];
+  const geo=new THREE.BufferGeometry().setFromPoints([a,b]);
+  const line=new THREE.Line(geo,new THREE.LineDashedMaterial({color:0x394957,dashSize:.055,gapSize:.035,transparent:true,opacity:.95}));
+  line.computeLineDistances();group.add(line);
+  const dir=b.clone().sub(a).normalize(),dist=a.distanceTo(b)-.025;
+  group.add(new THREE.ArrowHelper(dir,a,dist,0x394957,.06,.035),new THREE.ArrowHelper(dir.clone().negate(),b,dist,0x394957,.06,.035));
+  for(const p of [a,b]){
+    const dot=new THREE.Sprite(new THREE.SpriteMaterial({map:makeSoftHotspotTexture(),color:0xffffff,transparent:true,opacity:1,depthTest:false,depthWrite:false}));
+    dot.scale.set(.13,.13,1);dot.position.copy(p);dot.renderOrder=52;group.add(dot);
+  }
+  const label=makeTextSprite('d*',{color:'#9a6813',width:.35,font:220});
+  label.position.copy(a).lerp(b,.5).add(new THREE.Vector3(.17,0,.18));group.add(label);
+  const caption=makeTextSprite('Reference surface distance  d* (mm)',{color:'#52626d',width:1.08,font:27});
+  caption.position.set(0,-2.03,.35);group.add(caption);
+  return group;
+}
+
+function rebuild(){
+  clearPair();
+
+  if(preset==='tooth'){
+    anatomyGroup=makeToothNerveModel();
+    pairGroup.add(anatomyGroup);
+    gapLine=makeToothNerveDistance();
+    pairGroup.add(gapLine);
+    refreshDisplay();
+    setStatus('Tooth–nerve anatomy model regenerated.');
+    return;
+  }
+
+  meshA=buildStructure('A');
+  meshB=buildStructure('B');
+  pairGroup.add(meshA,meshB);
+
+  wireA=makeWire(meshA); wireB=makeWire(meshB);
+  pairGroup.add(wireA,wireB);
+
+  boundaryA=makeFacingBoundary('A');
+  boundaryB=makeFacingBoundary('B');
+  pairGroup.add(boundaryA,boundaryB);
+
+  gapLine=makeMinimumGap();
+  pairGroup.add(gapLine);
+
+  sdfTargets=[makeConformalSDFOverlay(meshA,'A'),makeConformalSDFOverlay(meshB,'B'),makeSDFLegend()];
+  sdfTargets.forEach(t=>pairGroup.add(t));
+
+  const criticalOverlay=makeCriticalOverlay();
+  criticalTargets=[criticalOverlay.group,criticalOverlay.bands];
+  criticalTargets.forEach(t=>pairGroup.add(t));
+
+  poolLines=makePoolingLinks();
+  poolLines.forEach(l=>pairGroup.add(l));
+
+  refreshDisplay();
+  setStatus('Generic opposing surfaces regenerated.');
+}
+
+function refreshDisplay(){
+  if(preset==='tooth' && anatomyGroup){
+    const showA=$('showA').checked,showB=$('showB').checked;
+    anatomyGroup.userData.tooth.visible=showA;
+    anatomyGroup.userData.nerve.visible=showB;
+    if(gapLine) gapLine.visible=$('showGap').checked&&showA&&showB;
+    $('onlyABtn').classList.toggle('active',showA&&!showB);
+    $('onlyBBtn').classList.toggle('active',showB&&!showA);
+    $('showBothBtn').classList.toggle('active',showA&&showB);
+    $('legend').style.display='none';
+    return;
+  }
+  if(meshA) updateMeshColors(meshA,'A');
+  if(meshB) updateMeshColors(meshB,'B');
+
+  if(meshA) meshA.visible=$('showA').checked;
+  if(meshB) meshB.visible=$('showB').checked;
+  const showA=$('showA').checked,showB=$('showB').checked;
+  const showSDF=$('showSDF').checked;
+  const criticalView=$('showCritical').checked||$('showBands').checked;
+  pairGroup.position.y=0;
+  $('onlyABtn').classList.toggle('active',showA&&!showB);
+  $('onlyBBtn').classList.toggle('active',showB&&!showA);
+  $('showBothBtn').classList.toggle('active',showA&&showB);
+
+  const wire=$('showWire').checked;
+  if(wireA) wireA.visible=wire&&showA;
+  if(wireB) wireB.visible=wire&&showB;
+
+  for(const mesh of [meshA,meshB]) if(mesh){
+    mesh.material.transparent=criticalView;
+    mesh.material.opacity=criticalView ? .23 : 1;
+    mesh.material.depthWrite=!criticalView;
+    mesh.material.needsUpdate=true;
+  }
+
+  const bd=$('showBoundary').checked;
+  if(boundaryA) boundaryA.visible=bd&&showA;
+  if(boundaryB) boundaryB.visible=bd&&showB;
+
+  if(gapLine) gapLine.visible=$('showGap').checked&&showA&&showB;
+
+  sdfTargets.forEach(t=>{
+    if(t.userData.side) t.visible=showSDF&&(t.userData.side==='A'?showA:showB);
+    else t.visible=showSDF;
+  });
+
+  const distributions=criticalTargets.find(t=>t.name==='Normalized critical distributions');
+  const bands=criticalTargets.find(t=>t.name==='Critical-band targets');
+  if(distributions) distributions.visible=$('showCritical').checked&&showA&&showB;
+  if(bands) bands.visible=$('showBands').checked&&showA&&showB;
+
+  const links=$('showLinks').checked;
+  poolLines.forEach(l=>l.visible=links&&showA&&showB);
+
+  $('legend').style.display=$('showHeat').checked?'block':'none';
+}
+
+const presetCopy={
+  pair:['A/B generic boundary pair','Generic schematic surfaces — no patient anatomy.'],
+  field:['Surface relation fields','Facing boundary geometry with relational surface emphasis.'],
+  critical:['Bilateral critical distributions','Localized probability mass on the mutually facing boundaries.'],
+  pooling:['Relational pooling','Multiple paired boundary relations aggregated across the local interface.'],
+  changed:['Local boundary consequence','A localized deformation changes the governing gap while global shape stays similar.'],
+  tooth:['Tooth–nerve spatial relation','A procedural molar and an inferior-alveolar-nerve schematic with surface distance d*.']
+};
+
+function setPreset(name){
+  preset=name;
+  document.querySelectorAll('.preset').forEach(b=>b.classList.toggle('active',b.dataset.preset===name));
+
+  if(name==='pair'){
+    $('showHeat').checked=false;
+    $('showCritical').checked=false;
+    $('showBands').checked=false;
+    $('showLinks').checked=false;
+    $('showGap').checked=true;
+    $('showBoundary').checked=true;
+    state.change=0.08;
+  }
+  if(name==='field'){
+    $('showHeat').checked=false;
+    $('showCritical').checked=false;
+    $('showBands').checked=false;
+    $('showLinks').checked=false;
+    $('showGap').checked=true;
+    $('showBoundary').checked=true;
+    state.change=0.14;
+  }
+  if(name==='critical'){
+    $('showHeat').checked=false;
+    $('showSDF').checked=false;
+    $('showCritical').checked=true;
+    $('showBands').checked=false;
+    $('showLinks').checked=false;
+    $('showGap').checked=false;
+    $('showBoundary').checked=false;
+    state.change=0.30;
+  }
+  if(name==='pooling'){
+    $('showHeat').checked=true;
+    $('showCritical').checked=false;
+    $('showBands').checked=false;
+    $('showLinks').checked=true;
+    $('showGap').checked=false;
+    $('showBoundary').checked=false;
+    state.change=0.27;
+  }
+  if(name==='changed'){
+    $('showHeat').checked=false;
+    $('showCritical').checked=false;
+    $('showBands').checked=true;
+    $('showLinks').checked=false;
+    $('showGap').checked=true;
+    $('showBoundary').checked=true;
+    state.change=0.43;
+  }
+  if(name==='tooth'){
+    $('showHeat').checked=false;
+    $('showSDF').checked=false;
+    $('showCritical').checked=false;
+    $('showBands').checked=false;
+    $('showLinks').checked=false;
+    $('showGap').checked=true;
+    $('showBoundary').checked=false;
+  }
+
+  $('change').value=state.change;
+  updateLabels();
+  const copy=presetCopy[name];
+  $('presetTitle').textContent=copy[0];
+  $('presetDesc').textContent=copy[1];
+  rebuild();
+  if(name==='tooth'){
+    camera.position.set(.12,2.25,6.85);
+    controls.target.set(0,-.30,0);
+    controls.update();
+  }
+}
+document.querySelectorAll('.preset').forEach(b=>b.onclick=()=>setPreset(b.dataset.preset));
+
+function updateLabels(){
+  $('gapV').textContent=Number(state.gap).toFixed(2);
+  $('changeV').textContent=Number(state.change).toFixed(2);
+  $('waveV').textContent=Number(state.wave).toFixed(2);
+  $('reliefAV').textContent=Number(state.reliefA).toFixed(2);
+  $('reliefBV').textContent=Number(state.reliefB).toFixed(2);
+  $('reliefFreqV').textContent=Number(state.reliefFreq).toFixed(2);
+  $('lobesV').textContent=Number(state.lobes).toFixed(2);
+  $('thickV').textContent=Number(state.thick).toFixed(2);
+  $('seedV').textContent=state.seed;
+  $('critYV').textContent=Number(state.critY).toFixed(2);
+  $('critZV').textContent=Number(state.critZ).toFixed(2);
+  $('critRV').textContent=Number(state.critR).toFixed(2);
+  $('sdfSizeV').textContent=Number(state.sdfSize).toFixed(2);
+}
+
+const bind=[
+  ['gap','gap'],['change','change'],['wave','wave'],
+  ['reliefA','reliefA'],['reliefB','reliefB'],['reliefFreq','reliefFreq'],['lobes','lobes'],['thick','thick'],
+  ['seed','seed'],['critY','critY'],['critZ','critZ'],['critR','critR'],['sdfSize','sdfSize']
+];
+bind.forEach(([id,key])=>{
+  $(id).oninput=e=>{
+    state[key]= key==='seed'?Number.parseInt(e.target.value):Number(e.target.value);
+    updateLabels();
+  };
+  $(id).onchange=()=>rebuild();
+});
+
+$('colorA').oninput=e=>{state.colorA=e.target.value;refreshDisplay()};
+$('colorB').oninput=e=>{state.colorB=e.target.value;refreshDisplay()};
+
+['showA','showB','showSDF','showCritical','showBands','showHeat','showGap','showLinks','showWire','showBoundary'].forEach(id=>$(id).onchange=refreshDisplay);
+
+function setVisibleStructures(showA,showB){
+  $('showA').checked=showA;
+  $('showB').checked=showB;
+  refreshDisplay();
+}
+$('onlyABtn').onclick=()=>setVisibleStructures(true,false);
+$('onlyBBtn').onclick=()=>setVisibleStructures(false,true);
+$('showBothBtn').onclick=()=>setVisibleStructures(true,true);
+
+$('regenBtn').onclick=rebuild;
+$('swapBtn').onclick=()=>{
+  state.seed=(state.seed%25)+1;
+  $('seed').value=state.seed;
+  updateLabels();
+  rebuild();
+};
+
+$('closeupBtn').onclick=()=>{
+  camera.position.set(0.0,0.05,5.15);
+  controls.target.set(0,0,0);
+  controls.update();
+  setStatus('Interface close-up camera.');
+};
+$('resetViewBtn').onclick=resetCamera;
+
+function resize(){
+  const w=wrap.clientWidth,h=wrap.clientHeight;
+  renderer.setSize(w,h,false);
+  camera.aspect=w/h;
+  camera.updateProjectionMatrix();
+}
+addEventListener('resize',resize);
+resize();
+
+function downloadBlob(blob,name){
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=name;a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1200);
+}
+
+$('pngBtn').onclick=()=>{
+  const old=renderer.getPixelRatio();
+  renderer.setPixelRatio(Math.min(devicePixelRatio*2,4));
+  resize();
+  renderer.render(scene,camera);
+  canvas.toBlob(blob=>{
+    if(blob) downloadBlob(blob,'relscope_surface_effect.png');
+    renderer.setPixelRatio(old);
+    resize();
+  },'image/png');
+};
+
+$('objBtn').onclick=()=>{
+  const g=new THREE.Group();
+  for(const src of [meshA,meshB]){
+    const m=src.clone();
+    m.geometry=src.geometry.clone();
+    m.applyMatrix4(pairGroup.matrixWorld);
+    m.position.set(0,0,0);m.rotation.set(0,0,0);m.scale.set(1,1,1);m.updateMatrix();
+    g.add(m);
+  }
+  const text=new OBJExporter().parse(g);
+  downloadBlob(new Blob([text],{type:'text/plain'}),'relscope_generic_pair.obj');
+};
+
+function rgbString(c){
+  const cl=x=>Math.max(0,Math.min(255,Math.round(x*255)));
+  return `rgb(${cl(c.r)},${cl(c.g)},${cl(c.b)})`;
+}
+
+function exportSVG(){
+  renderer.render(scene,camera);
+
+  const width=Math.max(720,Math.round(wrap.clientWidth));
+  const height=Math.max(520,Math.round(wrap.clientHeight));
+  const cameraWorld=new THREE.Vector3();
+  camera.getWorldPosition(cameraWorld);
+
+  const items=[];
+
+  for(const mesh of [meshA,meshB]){
+    mesh.updateWorldMatrix(true,false);
+    const worldMat=new THREE.Matrix4().multiplyMatrices(pairGroup.matrixWorld,mesh.matrix);
+    const g=mesh.geometry,pos=g.getAttribute('position'),col=g.getAttribute('color'),idx=g.index;
+
+    const va=new THREE.Vector3(),vb=new THREE.Vector3(),vc=new THREE.Vector3();
+    const wa=new THREE.Vector3(),wb=new THREE.Vector3(),wc=new THREE.Vector3();
+    const pa=new THREE.Vector3(),pb=new THREE.Vector3(),pc=new THREE.Vector3();
+    const n=new THREE.Vector3(),view=new THREE.Vector3(),cent=new THREE.Vector3();
+
+    const triCount=idx.count/3;
+    for(let t=0;t<triCount;t++){
+      const ia=idx.getX(t*3),ib=idx.getX(t*3+1),ic=idx.getX(t*3+2);
+
+      va.fromBufferAttribute(pos,ia);vb.fromBufferAttribute(pos,ib);vc.fromBufferAttribute(pos,ic);
+      wa.copy(va).applyMatrix4(worldMat);
+      wb.copy(vb).applyMatrix4(worldMat);
+      wc.copy(vc).applyMatrix4(worldMat);
+
+      n.subVectors(wb,wa).cross(new THREE.Vector3().subVectors(wc,wa)).normalize();
+      cent.copy(wa).add(wb).add(wc).multiplyScalar(1/3);
+      view.copy(cameraWorld).sub(cent).normalize();
+      if(n.dot(view)<=0) continue;
+
+      pa.copy(wa).project(camera);pb.copy(wb).project(camera);pc.copy(wc).project(camera);
+
+      const x1=(pa.x*.5+.5)*width,y1=(-pa.y*.5+.5)*height;
+      const x2=(pb.x*.5+.5)*width,y2=(-pb.y*.5+.5)*height;
+      const x3=(pc.x*.5+.5)*width,y3=(-pc.y*.5+.5)*height;
+
+      const c=new THREE.Color(
+        (col.getX(ia)+col.getX(ib)+col.getX(ic))/3,
+        (col.getY(ia)+col.getY(ib)+col.getY(ic))/3,
+        (col.getZ(ia)+col.getZ(ib)+col.getZ(ic))/3
+      );
+
+      const light=new THREE.Vector3(-.45,.72,.65).normalize();
+      const shade=.62+.38*Math.max(0,n.dot(light));
+      c.multiplyScalar(shade);
+
+      items.push({
+        z:(pa.z+pb.z+pc.z)/3,
+        svg:`<polygon points="${x1.toFixed(2)},${y1.toFixed(2)} ${x2.toFixed(2)},${y2.toFixed(2)} ${x3.toFixed(2)},${y3.toFixed(2)}" fill="${rgbString(c)}"/>`
+      });
+    }
+  }
+
+  items.sort((a,b)=>b.z-a.z);
+
+  // Export overlays as simple SVG paths after the surfaces.
+  const overlay=[];
+
+  function projectPoint(pLocal){
+    const p=pLocal.clone().applyMatrix4(pairGroup.matrixWorld).project(camera);
+    return [(p.x*.5+.5)*width,(-p.y*.5+.5)*height];
+  }
+
+  if(gapLine && gapLine.visible && gapLine.userData.points){
+    const a=projectPoint(gapLine.userData.points[0]),b=projectPoint(gapLine.userData.points[1]);
+    overlay.push(`<line x1="${a[0].toFixed(2)}" y1="${a[1].toFixed(2)}" x2="${b[0].toFixed(2)}" y2="${b[1].toFixed(2)}" stroke="#29323d" stroke-width="2.2"/>`);
+  }
+
+  if($('showBoundary').checked){
+    for(const side of ['A','B']){
+      const pts=[];
+      for(let i=0;i<70;i++){
+        const tt=i/69,ny=-.78+1.56*tt;
+        const nz=.18*Math.sin(2.3*ny+.8)+(side==='A'?-.04:.04);
+        pts.push(projectPoint(frontPoint(side,ny,nz)));
+      }
+      const d=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(2)+' '+p[1].toFixed(2)).join(' ');
+      overlay.push(`<path d="${d}" fill="none" stroke="${side==='A'?'#963d35':'#1a6571'}" stroke-width="2" stroke-dasharray="6 5"/>`);
+    }
+  }
+
+  if($('showLinks').checked){
+    const ys=[-.32,-.16,0,.16,.32];
+    ys.forEach((dy,k)=>{
+      const ny=state.critY+dy*state.critR;
+      const nz=state.critZ+.18*Math.sin(k*1.35)*state.critR;
+      const a=frontPoint('A',ny,nz),b=frontPoint('B',ny,nz);
+      const m=a.clone().lerp(b,.5);m.z+=.10+.035*k;
+      const A=projectPoint(a),M=projectPoint(m),B=projectPoint(b);
+      overlay.push(`<path d="M${A[0].toFixed(2)} ${A[1].toFixed(2)} Q${M[0].toFixed(2)} ${M[1].toFixed(2)} ${B[0].toFixed(2)} ${B[1].toFixed(2)}" fill="none" stroke="#b06bd6" stroke-opacity=".55" stroke-width="1.7"/>`);
+    });
+  }
+
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
+<rect width="100%" height="100%" fill="#f7f8fa"/>
+<g id="surfaces" stroke="none">
+${items.map(x=>x.svg).join('\n')}
+</g>
+<g id="relations">
+${overlay.join('\n')}
+</g>
+</svg>`;
+
+  downloadBlob(new Blob([svg],{type:'image/svg+xml'}),'relscope_surface_effect_vector.svg');
+}
+$('svgBtn').onclick=exportSVG;
+
+function setStatus(s){statusEl.textContent=s}
+
+function animate(){
+  controls.update();
+  renderer.render(scene,camera);
+  requestAnimationFrame(animate);
+}
+
+updateLabels();
+rebuild();
+animate();
+</script>
+</body>
+</html>

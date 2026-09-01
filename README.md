@@ -18,6 +18,18 @@ The distributions pool local features from both structures into a relation repre
                  → bilateral relational pooling → distance + scale
 ```
 
+## Method overview
+
+![RelScope method architecture](docs/figure2_drawing_helper/figure2_method_architecture.png)
+
+Figure 2 summarizes the relation-specific inference path, target construction,
+critical-distribution learning, and bilateral relational pooling used by the
+reported model. An accompanying
+[interactive surface generator](docs/figure2_drawing_helper/relscope_figure_surface_generator.html)
+is included as an auxiliary drawing tool for constructing generic paired
+surfaces, SDF-style fields, critical regions, and pooling illustrations. It is
+not part of model training or inference and does not display patient data.
+
 ## Repository contents
 
 ```text
@@ -33,6 +45,7 @@ configs/patterns_experiments.json
 splits/                        released patient splits and path-portable relation indices
 results/                       machine-readable manuscript statistics
 tests/                         geometry, model, and split checks
+docs/figure2_drawing_helper/   Figure 2 preview and auxiliary drawing tool
 ```
 
 The repository does not redistribute medical images, preprocessing caches, checkpoints, or training logs. Dataset access remains governed by the original providers.
