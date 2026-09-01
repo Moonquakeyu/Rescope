@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "relmeasure3d"
+version = "0.1.0"
+description = "RelScope: measurement-critical geometry for local 3D anatomical quantification"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=2.0,<2.4",
+  "scipy>=1.15,<1.17",
+  "nibabel>=5.3,<6",
+  "pandas>=2.2,<3",
+  "scikit-image>=0.25,<0.27",
+  "torch>=2.8",
+  "tqdm>=4.66",
+]
+
+[project.optional-dependencies]
+baselines = [
+  "monai>=1.4,<2",
+  "dynamic-network-architectures>=0.3,<1",
+]
+visualization = [
+  "matplotlib>=3.9,<4",
+  "pillow>=10,<13",
+]
+dev = [
+  "pytest>=8,<10",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

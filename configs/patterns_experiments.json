@@ -1,0 +1,68 @@
+{
+  "manuscript_model_name": "RelScope",
+  "development_model_name": "PublicationRelMeasure3D",
+  "seeds": [20260821, 20260822, 20260823],
+  "optimizer": {
+    "name": "AdamW",
+    "learning_rate": 0.0002,
+    "weight_decay": 0.0001,
+    "gradient_clip_norm": 5.0,
+    "precision": "BF16 autocast",
+    "max_steps": 14000,
+    "validate_every_steps": 400,
+    "early_stopping_patience": 10
+  },
+  "relscope": {
+    "base_width": 16,
+    "critical_loss_weight": 0.30,
+    "sdf_loss_weight": 0.20,
+    "surface_and_critical_warmup_steps": 6000
+  },
+  "settings": {
+    "tooth_ian": {
+      "crop_size": 80,
+      "crop_jitter_voxels": 8,
+      "batch_size": {"direct": 8, "relscope": 4},
+      "split": "splits/tooth_ian/split.json"
+    },
+    "tooth_sinus": {
+      "crop_size": 80,
+      "crop_jitter_voxels": 8,
+      "batch_size": {"direct": 8, "relscope": 4},
+      "split": "splits/tooth_sinus/split.json"
+    },
+    "tooth_ian_scanner_holdout": {
+      "crop_size": 80,
+      "crop_jitter_voxels": 8,
+      "batch_size": {"direct": 8, "relscope": 4},
+      "split": "splits/tooth_ian_scanner_holdout/split.json"
+    },
+    "totalsegmentator_pancreas_aorta": {
+      "crop_size": 96,
+      "crop_jitter_voxels": 12,
+      "batch_size": {"direct": 4, "relscope": 2},
+      "split": "splits/totalsegmentator_pancreas_aorta/split.json"
+    },
+    "amos22_pancreas_aorta": {
+      "crop_size": 96,
+      "crop_jitter_voxels": 12,
+      "batch_size": {"direct": 4, "relscope": 2},
+      "split": "splits/amos22_pancreas_aorta/split.json"
+    },
+    "msd_task08_tumour_vessel": {
+      "crop_size": 96,
+      "crop_jitter_voxels": 12,
+      "batch_size": {"direct": 4, "relscope": 2},
+      "split": "splits/msd_task08_tumour_vessel/split.json"
+    }
+  },
+  "segmentation_selection": {
+    "thresholds": [0.3, 0.5, 0.7],
+    "validation_objective": "distance_mae_mm + 10 * empty_mask_failure_rate",
+    "selected": {
+      "tooth_sinus": {"architecture": "residual_encoder_unet", "threshold": 0.3},
+      "totalsegmentator_pancreas_aorta": {"architecture": "mednext", "threshold": 0.7},
+      "amos22_pancreas_aorta": {"architecture": "residual_encoder_unet", "threshold": 0.7}
+    }
+  }
+}

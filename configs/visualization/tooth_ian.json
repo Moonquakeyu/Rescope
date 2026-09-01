@@ -1,0 +1,19 @@
+{
+  "dataset": "ToothFairy3",
+  "setting": "tooth–IAN",
+  "cache": "artifacts/tooth_center_96/cache",
+  "split": "artifacts/full_532/patient_split.json",
+  "crop_size": 80,
+  "models": [
+    {"slug": "direct", "label": "Direct regression", "type": "publication_direct", "base": 16, "checkpoint": "artifacts/publication_evidence_v1/direct_seed20260821/latest.pt"},
+    {"slug": "multitask", "label": "Surface multitask", "type": "publication_multitask", "base": 16, "checkpoint": "artifacts/publication_evidence_v1/multitask_seed20260821/latest.pt"},
+    {"slug": "analytic_softmin", "label": "Analytic soft-min", "type": "publication_analytic_softmin", "base": 16, "checkpoint": "artifacts/cvpr_baselines_v1/analytic_softmin_seed20260821/latest.pt"},
+    {"slug": "analytic_pool", "label": "Analytic critical pooling", "type": "publication_analytic_pool", "base": 16, "checkpoint": "artifacts/cvpr_baselines_v1/analytic_pool_seed20260821/latest.pt"},
+    {"slug": "no_critical", "label": "Without critical supervision", "type": "publication_relmeasure", "base": 16, "checkpoint": "artifacts/publication_evidence_v1/rel_no_critical_seed20260821/latest.pt"},
+    {"slug": "relmeasure3d", "label": "RelScope", "type": "publication_relmeasure", "base": 16, "checkpoint": "artifacts/publication_evidence_v1/rel_w030_seed20260821/latest.pt"},
+    {"slug": "matched_segmentation", "label": "Matched segmentation", "type": "publication_segmentation", "base": 16, "threshold": 0.3, "checkpoint": "artifacts/publication_evidence_v1/segmentation_seed20260821/latest.pt"},
+    {"slug": "segresnet", "label": "SegResNet", "type": "monai_segresnet", "base": 24, "threshold": 0.3, "checkpoint": "artifacts/cvpr_gap_v1/monai_segresnet_seed20260821/latest.pt"},
+    {"slug": "mednext", "label": "MedNeXt", "type": "monai_mednext", "base": 24, "threshold": 0.3, "checkpoint": "artifacts/cvpr_baselines_v1/monai_mednext_seed20260821/latest.pt"},
+    {"slug": "resenc_unet", "label": "Residual-encoder U-Net", "type": "nnunet_resenc", "base": 32, "threshold": 0.3, "checkpoint": "artifacts/cvpr_baselines_v1/nnunet_resenc_seed20260821/latest.pt"}
+  ]
+}

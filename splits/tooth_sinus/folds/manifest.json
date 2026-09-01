@@ -1,0 +1,116 @@
+{
+  "seed": 20260821,
+  "folds": 5,
+  "items": [
+    {
+      "fold": 0,
+      "path": "fold_0.json",
+      "counts": {
+        "train": {
+          "patients": 30,
+          "samples": 234
+        },
+        "validation": {
+          "patients": 10,
+          "samples": 77
+        },
+        "calibration": {
+          "patients": 0,
+          "samples": 0
+        },
+        "test": {
+          "patients": 11,
+          "samples": 68
+        }
+      }
+    },
+    {
+      "fold": 1,
+      "path": "fold_1.json",
+      "counts": {
+        "train": {
+          "patients": 31,
+          "samples": 224
+        },
+        "validation": {
+          "patients": 10,
+          "samples": 78
+        },
+        "calibration": {
+          "patients": 0,
+          "samples": 0
+        },
+        "test": {
+          "patients": 10,
+          "samples": 77
+        }
+      }
+    },
+    {
+      "fold": 2,
+      "path": "fold_2.json",
+      "counts": {
+        "train": {
+          "patients": 31,
+          "samples": 220
+        },
+        "validation": {
+          "patients": 10,
+          "samples": 81
+        },
+        "calibration": {
+          "patients": 0,
+          "samples": 0
+        },
+        "test": {
+          "patients": 10,
+          "samples": 78
+        }
+      }
+    },
+    {
+      "fold": 3,
+      "path": "fold_3.json",
+      "counts": {
+        "train": {
+          "patients": 31,
+          "samples": 223
+        },
+        "validation": {
+          "patients": 10,
+          "samples": 75
+        },
+        "calibration": {
+          "patients": 0,
+          "samples": 0
+        },
+        "test": {
+          "patients": 10,
+          "samples": 81
+        }
+      }
+    },
+    {
+      "fold": 4,
+      "path": "fold_4.json",
+      "counts": {
+        "train": {
+          "patients": 30,
+          "samples": 236
+        },
+        "validation": {
+          "patients": 11,
+          "samples": 68
+        },
+        "calibration": {
+          "patients": 0,
+          "samples": 0
+        },
+        "test": {
+          "patients": 10,
+          "samples": 75
+        }
+      }
+    }
+  ]
+}

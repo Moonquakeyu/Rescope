@@ -1,0 +1,12 @@
+{
+  "dataset": "MSD Task08",
+  "setting": "tumour–hepatic vessel (degenerate negative setting)",
+  "cache": "artifacts/cvpr_extension_v1/msd_tumour_vessel_cache",
+  "split": "artifacts/cvpr_extension_v1/msd_tumour_vessel_split.json",
+  "crop_size": 96,
+  "positive_only": true,
+  "models": [
+    {"slug": "direct", "label": "Direct regression", "type": "publication_direct", "base": 16, "checkpoint": "artifacts/cvpr_extension_v1/msd_tumour_vessel_publication_direct_seed20260821/latest.pt"},
+    {"slug": "relmeasure3d", "label": "RelScope", "type": "publication_relmeasure", "base": 16, "checkpoint": "artifacts/cvpr_extension_v1/msd_tumour_vessel_publication_relmeasure_seed20260821/latest.pt"}
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "dataset": "TotalSegmentator v1",
+  "setting": "pancreas–aorta",
+  "cache": "artifacts/cvpr_extension_v1/totalseg_pancreas_aorta_cache",
+  "split": "artifacts/cvpr_extension_v1/totalseg_pancreas_aorta_split.json",
+  "crop_size": 96,
+  "models": [
+    {"slug": "direct", "label": "Direct regression", "type": "publication_direct", "base": 16, "checkpoint": "artifacts/cvpr_extension_v1/totalseg_pancreas_aorta_publication_direct_seed20260821/latest.pt"},
+    {"slug": "multitask", "label": "Surface multitask", "type": "publication_multitask", "base": 16, "checkpoint": "artifacts/cvpr_foursetting_baselines_v1/totalseg_multitask_seed20260821/latest.pt"},
+    {"slug": "analytic_softmin", "label": "Analytic soft-min", "type": "publication_analytic_softmin", "base": 16, "checkpoint": "artifacts/cvpr_foursetting_baselines_v1/totalseg_analytic_softmin_seed20260821/latest.pt"},
+    {"slug": "analytic_pool", "label": "Analytic critical pooling", "type": "publication_analytic_pool", "base": 16, "checkpoint": "artifacts/cvpr_foursetting_baselines_v1/totalseg_analytic_pool_seed20260821/latest.pt"},
+    {"slug": "no_critical", "label": "Without critical supervision", "type": "publication_relmeasure", "base": 16, "checkpoint": "artifacts/cvpr_foursetting_baselines_v1/totalseg_no_critical_seed20260821/latest.pt"},
+    {"slug": "relmeasure3d", "label": "RelScope", "type": "publication_relmeasure", "base": 16, "checkpoint": "artifacts/cvpr_extension_v1/totalseg_pancreas_aorta_publication_relmeasure_seed20260821/latest.pt"},
+    {"slug": "mednext", "label": "MedNeXt", "type": "monai_mednext", "base": 24, "threshold": 0.7, "checkpoint": "artifacts/cvpr_foursetting_baselines_v1/totalseg_monai_mednext_seed20260821/latest.pt"},
+    {"slug": "resenc_unet", "label": "Residual-encoder U-Net candidate", "type": "nnunet_resenc", "base": 32, "threshold": 0.7, "checkpoint": "artifacts/cvpr_foursetting_baselines_v1/totalseg_nnunet_resenc_seed20260821/latest.pt"}
+  ]
+}

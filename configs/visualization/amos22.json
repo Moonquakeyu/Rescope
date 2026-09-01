@@ -1,0 +1,18 @@
+{
+  "dataset": "AMOS22",
+  "setting": "pancreas–aorta (in-domain)",
+  "cache": "artifacts/amos22_external_v1/amos_pancreas_aorta_cache",
+  "split": "artifacts/amos22_external_v1/amos_pancreas_aorta_split.json",
+  "case_selection": "nearest_below_median",
+  "crop_size": 96,
+  "models": [
+    {"slug": "direct", "label": "Direct regression", "type": "publication_direct", "base": 16, "checkpoint": "artifacts/amos22_external_v1/amos_publication_direct_seed20260821/latest.pt"},
+    {"slug": "multitask", "label": "Surface multitask", "type": "publication_multitask", "base": 16, "checkpoint": "artifacts/cvpr_foursetting_baselines_v1/amos_multitask_seed20260821/latest.pt"},
+    {"slug": "analytic_softmin", "label": "Analytic soft-min", "type": "publication_analytic_softmin", "base": 16, "checkpoint": "artifacts/cvpr_foursetting_baselines_v1/amos_analytic_softmin_seed20260821/latest.pt"},
+    {"slug": "analytic_pool", "label": "Analytic critical pooling", "type": "publication_analytic_pool", "base": 16, "checkpoint": "artifacts/cvpr_foursetting_baselines_v1/amos_analytic_pool_seed20260821/latest.pt"},
+    {"slug": "no_critical", "label": "Without critical supervision", "type": "publication_relmeasure", "base": 16, "checkpoint": "artifacts/cvpr_foursetting_baselines_v1/amos_no_critical_seed20260821/latest.pt"},
+    {"slug": "relmeasure3d", "label": "RelScope", "type": "publication_relmeasure", "base": 16, "checkpoint": "artifacts/amos22_external_v1/amos_publication_relmeasure_seed20260821/latest.pt"},
+    {"slug": "mednext", "label": "MedNeXt candidate", "type": "monai_mednext", "base": 24, "threshold": 0.7, "checkpoint": "artifacts/cvpr_foursetting_baselines_v1/amos_monai_mednext_seed20260821/latest.pt"},
+    {"slug": "resenc_unet", "label": "Residual-encoder U-Net", "type": "nnunet_resenc", "base": 32, "threshold": 0.7, "checkpoint": "artifacts/cvpr_foursetting_baselines_v1/amos_nnunet_resenc_seed20260821/latest.pt"}
+  ]
+}

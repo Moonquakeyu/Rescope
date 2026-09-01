@@ -1,0 +1,143 @@
+{
+  "status": "complete",
+  "protocol": "patient-level 5-fold out-of-fold evaluation; rotating validation fold",
+  "seeds": [
+    20260821,
+    20260822,
+    20260823
+  ],
+  "folds": 5,
+  "per_seed": [
+    {
+      "seed": 20260821,
+      "patients": 51,
+      "relations": 372,
+      "direct": {
+        "mean": 2.2103348755708305,
+        "std": 5.3837533297736435,
+        "p95": 7.749674767255773,
+        "n": 372
+      },
+      "relmeasure3d": {
+        "mean": 1.870919821673744,
+        "std": 4.867179182313882,
+        "p95": 5.9762488722801175,
+        "n": 372
+      },
+      "segmentation": {
+        "mean": 1.8354539824347347,
+        "std": 3.9826805914562184,
+        "p95": 4.315504689053993,
+        "n": 372
+      },
+      "paired_patient_bootstrap": {
+        "ours_vs_direct": {
+          "mean_improvement_mm": 0.3395747327893191,
+          "ci95_low_mm": 0.0825128300906867,
+          "ci95_high_mm": 0.6339738174058734,
+          "improvement_probability": 0.9961
+        },
+        "ours_vs_segmentation": {
+          "mean_improvement_mm": -0.036995799092587676,
+          "ci95_low_mm": -0.2673445159032332,
+          "ci95_high_mm": 0.16113467645934965,
+          "improvement_probability": 0.3892
+        }
+      }
+    },
+    {
+      "seed": 20260822,
+      "patients": 50,
+      "relations": 368,
+      "direct": {
+        "mean": 1.9633086029764102,
+        "std": 4.883345572951912,
+        "p95": 6.392325663566584,
+        "n": 368
+      },
+      "relmeasure3d": {
+        "mean": 1.5150974127223573,
+        "std": 3.0954003821524827,
+        "p95": 5.692663729190824,
+        "n": 368
+      },
+      "segmentation": {
+        "mean": 1.657041311332936,
+        "std": 3.1613320309963253,
+        "p95": 4.265713763236999,
+        "n": 368
+      },
+      "paired_patient_bootstrap": {
+        "ours_vs_direct": {
+          "mean_improvement_mm": 0.4524405114474559,
+          "ci95_low_mm": 0.029888451898909256,
+          "ci95_high_mm": 0.9448052645625412,
+          "improvement_probability": 0.9816
+        },
+        "ours_vs_segmentation": {
+          "mean_improvement_mm": 0.14335993653411253,
+          "ci95_low_mm": -0.09080515819221884,
+          "ci95_high_mm": 0.34647490579957935,
+          "improvement_probability": 0.8955
+        }
+      }
+    },
+    {
+      "seed": 20260823,
+      "patients": 50,
+      "relations": 368,
+      "direct": {
+        "mean": 1.9583330430981258,
+        "std": 4.996910062179472,
+        "p95": 6.569136142730703,
+        "n": 368
+      },
+      "relmeasure3d": {
+        "mean": 1.6623908841334607,
+        "std": 3.920647622717499,
+        "p95": 6.121535670757294,
+        "n": 368
+      },
+      "segmentation": {
+        "mean": 1.5808110898801717,
+        "std": 3.1456515726335903,
+        "p95": 4.233842706680295,
+        "n": 368
+      },
+      "paired_patient_bootstrap": {
+        "ours_vs_direct": {
+          "mean_improvement_mm": 0.3012675541229104,
+          "ci95_low_mm": -0.08263815425187669,
+          "ci95_high_mm": 0.7397513369998295,
+          "improvement_probability": 0.9367
+        },
+        "ours_vs_segmentation": {
+          "mean_improvement_mm": -0.08267233985157338,
+          "ci95_low_mm": -0.4522965536090926,
+          "ci95_high_mm": 0.20424406598225425,
+          "improvement_probability": 0.3381
+        }
+      }
+    }
+  ],
+  "across_seed_mae": {
+    "direct": {
+      "mean": 2.0439921738817888,
+      "std": 0.14407848504524445,
+      "p95": 2.1856322483113884,
+      "n": 3
+    },
+    "relmeasure3d": {
+      "mean": 1.6828027061765207,
+      "std": 0.17878724377687047,
+      "p95": 1.8500669279197155,
+      "n": 3
+    },
+    "segmentation": {
+      "mean": 1.691102127882614,
+      "std": 0.13069374545157772,
+      "p95": 1.8176127153245547,
+      "n": 3
+    }
+  }
+}

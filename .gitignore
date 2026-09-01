@@ -1,0 +1,25 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.DS_Store
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+
+# Local data, caches, checkpoints, and runs
+data/
+work/
+runs/
+artifacts/
+checkpoints/
+logs/
+*.pt
+*.pth
+*.ckpt
+*.nii
+*.nii.gz
+*.npz

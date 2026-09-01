@@ -1,0 +1,1846 @@
+{
+  "status": "complete",
+  "generated_from": "completed per-case evaluation JSON; no model selection or test-set tuning",
+  "statistical_unit": "patient (relations within a scan are clustered)",
+  "seeds": [
+    20260821,
+    20260822,
+    20260823
+  ],
+  "bootstrap_repetitions": 20000,
+  "multiple_testing": "Holm adjustment across 6 settings × 3 seeds for patient-level Wilcoxon tests",
+  "settings": {
+    "tooth_ian": {
+      "label": "ToothFairy3 tooth–IAN",
+      "role": "in_domain",
+      "ground_truth_profile": {
+        "patients": 50,
+        "relations": 356,
+        "zero_distance_count": 20,
+        "zero_distance_percent": 5.617977528089887,
+        "mean_mm": 3.821240855527393,
+        "std_mm": 3.125060333558415,
+        "quantiles_mm": {
+          "min": 0.0,
+          "p25": 1.917999655008316,
+          "median": 3.4007279872894287,
+          "p75": 5.126402735710144,
+          "p95": 8.202132940292358,
+          "max": 33.80961990356445
+        }
+      },
+      "per_seed_patient_statistics": {
+        "20260821": {
+          "patients": 50,
+          "relations": 356,
+          "direct_patient_mean_mae_mm": 1.730568365393177,
+          "relmeasure3d_patient_mean_mae_mm": 1.3928297513120824,
+          "direct_minus_relmeasure3d_mm": 0.3377386140810947,
+          "relative_improvement_percent": 19.516051537459028,
+          "patient_bootstrap_ci95_mm": [
+            0.15399473708227782,
+            0.5023326075194121
+          ],
+          "improvement_probability": 0.9994,
+          "median_patient_delta_mm": 0.33632089532911774,
+          "wilcoxon_patient_mean_error": {
+            "statistic": 195.0,
+            "two_sided_p": 6.358623311442102e-06,
+            "holm_p_across_all_tests": 6.994485642586312e-05
+          }
+        },
+        "20260822": {
+          "patients": 50,
+          "relations": 356,
+          "direct_patient_mean_mae_mm": 1.6903833004283524,
+          "relmeasure3d_patient_mean_mae_mm": 1.2651874266477625,
+          "direct_minus_relmeasure3d_mm": 0.42519587378059,
+          "relative_improvement_percent": 25.15381414811913,
+          "patient_bootstrap_ci95_mm": [
+            0.2982293921583598,
+            0.5444916069159417
+          ],
+          "improvement_probability": 1.0,
+          "median_patient_delta_mm": 0.38323172732359834,
+          "wilcoxon_patient_mean_error": {
+            "statistic": 50.0,
+            "two_sided_p": 5.610267805877811e-11,
+            "holm_p_across_all_tests": 9.537455269992279e-10
+          }
+        },
+        "20260823": {
+          "patients": 50,
+          "relations": 356,
+          "direct_patient_mean_mae_mm": 1.6941696306854963,
+          "relmeasure3d_patient_mean_mae_mm": 1.268535803157304,
+          "direct_minus_relmeasure3d_mm": 0.4256338275281919,
+          "relative_improvement_percent": 25.123448078571187,
+          "patient_bootstrap_ci95_mm": [
+            0.2673084943481233,
+            0.5883271882096273
+          ],
+          "improvement_probability": 1.0,
+          "median_patient_delta_mm": 0.48248194493353364,
+          "wilcoxon_patient_mean_error": {
+            "statistic": 93.0,
+            "two_sided_p": 4.8571529021046445e-09,
+            "holm_p_across_all_tests": 7.771444643367431e-08
+          }
+        }
+      },
+      "hierarchical_across_seed_patient_bootstrap": {
+        "estimand": "mean across seeds of patient-mean Direct minus RelMeasure3D absolute error",
+        "observed_mean_delta_mm": 0.3961894384632922,
+        "observed_seed_std_mm": 0.050620372421487876,
+        "hierarchical_bootstrap_ci95_mm": [
+          0.29071683995810593,
+          0.49166046542959674
+        ],
+        "improvement_probability": 1.0,
+        "repetitions": 20000
+      },
+      "distance_regimes": {
+        "contact_0": {
+          "patients": 16,
+          "relations": 20,
+          "direct_mae_mm_mean_across_seeds": 1.2725739161173502,
+          "relmeasure3d_mae_mm_mean_across_seeds": 0.3538260677363723,
+          "direct_minus_relmeasure3d_mm": 0.918747848380978,
+          "relative_improvement_percent": 72.1960301672768,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 1.5735064685344695,
+              "relmeasure3d_mae_mm": 0.3308125059120357,
+              "delta_mm": 1.2426939626224338
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 1.1151293113827705,
+              "relmeasure3d_mae_mm": 0.3660868882667273,
+              "delta_mm": 0.7490424231160432
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 1.1290859684348107,
+              "relmeasure3d_mae_mm": 0.364578809030354,
+              "delta_mm": 0.7645071594044567
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            0.6078566612603027,
+            1.3086268290427847
+          ],
+          "improvement_probability": 1.0
+        },
+        "0_to_2_mm": {
+          "patients": 29,
+          "relations": 73,
+          "direct_mae_mm_mean_across_seeds": 1.264280086578844,
+          "relmeasure3d_mae_mm_mean_across_seeds": 0.6978741048167557,
+          "direct_minus_relmeasure3d_mm": 0.5664059817620881,
+          "relative_improvement_percent": 44.80067255467015,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 1.495576780748694,
+              "relmeasure3d_mae_mm": 0.6614135683399357,
+              "delta_mm": 0.8341632124087582
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 1.2106013324570983,
+              "relmeasure3d_mae_mm": 0.7389331795275211,
+              "delta_mm": 0.4716681529295772
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 1.0866621465307393,
+              "relmeasure3d_mae_mm": 0.6932755665828104,
+              "delta_mm": 0.3933865799479289
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            0.3486868527259364,
+            0.8866845332801524
+          ],
+          "improvement_probability": 1.0
+        },
+        "2_to_5_mm": {
+          "patients": 46,
+          "relations": 166,
+          "direct_mae_mm_mean_across_seeds": 1.0728675761376039,
+          "relmeasure3d_mae_mm_mean_across_seeds": 0.7398508736886175,
+          "direct_minus_relmeasure3d_mm": 0.33301670244898657,
+          "relative_improvement_percent": 31.039870143887594,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 1.158434082944709,
+              "relmeasure3d_mae_mm": 0.8658493872148445,
+              "delta_mm": 0.29258469572986456
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 1.0627878846892391,
+              "relmeasure3d_mae_mm": 0.705016530421843,
+              "delta_mm": 0.35777135426739615
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 0.9973807607788637,
+              "relmeasure3d_mae_mm": 0.6486867034291647,
+              "delta_mm": 0.34869405734969905
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            0.19079971545958843,
+            0.4509989602574557
+          ],
+          "improvement_probability": 1.0
+        },
+        "5_to_10_mm": {
+          "patients": 42,
+          "relations": 87,
+          "direct_mae_mm_mean_across_seeds": 1.6699717739075994,
+          "relmeasure3d_mae_mm_mean_across_seeds": 1.284613923551479,
+          "direct_minus_relmeasure3d_mm": 0.3853578503561203,
+          "relative_improvement_percent": 23.075710402841956,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 1.46959436076811,
+              "relmeasure3d_mae_mm": 1.3163213853178353,
+              "delta_mm": 0.15327297545027463
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 1.731898439341578,
+              "relmeasure3d_mae_mm": 1.290034659977617,
+              "delta_mm": 0.44186377936396104
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 1.80842252161311,
+              "relmeasure3d_mae_mm": 1.2474857253589848,
+              "delta_mm": 0.5609367962541252
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            0.08885608631624745,
+            0.5493471439750421
+          ],
+          "improvement_probability": 0.9975
+        },
+        "over_10_mm": {
+          "patients": 8,
+          "relations": 10,
+          "direct_mae_mm_mean_across_seeds": 10.139615694681803,
+          "relmeasure3d_mae_mm_mean_across_seeds": 10.186162120103837,
+          "direct_minus_relmeasure3d_mm": -0.04654642542203291,
+          "relative_improvement_percent": -0.4590551242138927,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 9.959190893173218,
+              "relmeasure3d_mae_mm": 10.411715114116669,
+              "delta_mm": -0.4525242209434506
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 9.99077033996582,
+              "relmeasure3d_mae_mm": 9.389387059211732,
+              "delta_mm": 0.6013832807540886
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 10.468885850906371,
+              "relmeasure3d_mae_mm": 10.757384186983108,
+              "delta_mm": -0.2884983360767368
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            -0.7983873386867345,
+            1.0269700845082599
+          ],
+          "improvement_probability": 0.6778
+        }
+      }
+    },
+    "tooth_sinus": {
+      "label": "ToothFairy3 tooth–sinus",
+      "role": "in_domain",
+      "ground_truth_profile": {
+        "patients": 5,
+        "relations": 34,
+        "zero_distance_count": 2,
+        "zero_distance_percent": 5.88235294117647,
+        "mean_mm": 3.799219660460949,
+        "std_mm": 5.72783484244657,
+        "quantiles_mm": {
+          "min": 0.0,
+          "p25": 0.7398019731044769,
+          "median": 1.629357933998108,
+          "p75": 3.9100822806358337,
+          "p95": 14.397171401977522,
+          "max": 26.55974578857422
+        }
+      },
+      "per_seed_patient_statistics": {
+        "20260821": {
+          "patients": 5,
+          "relations": 34,
+          "direct_patient_mean_mae_mm": 2.886146728595098,
+          "relmeasure3d_patient_mean_mae_mm": 1.8120340639352797,
+          "direct_minus_relmeasure3d_mm": 1.074112664659818,
+          "relative_improvement_percent": 37.21614892333171,
+          "patient_bootstrap_ci95_mm": [
+            -1.14398239950339,
+            4.084957239031792
+          ],
+          "improvement_probability": 0.76295,
+          "median_patient_delta_mm": 0.2171260043978691,
+          "wilcoxon_patient_mean_error": {
+            "statistic": 5.0,
+            "two_sided_p": 0.625,
+            "holm_p_across_all_tests": 1.0
+          }
+        },
+        "20260822": {
+          "patients": 5,
+          "relations": 34,
+          "direct_patient_mean_mae_mm": 3.9289868873357774,
+          "relmeasure3d_patient_mean_mae_mm": 1.5289167029162247,
+          "direct_minus_relmeasure3d_mm": 2.4000701844195524,
+          "relative_improvement_percent": 61.086235542186444,
+          "patient_bootstrap_ci95_mm": [
+            -0.4587385712067286,
+            7.459266313314439
+          ],
+          "improvement_probability": 0.7982,
+          "median_patient_delta_mm": 0.22282078713178644,
+          "wilcoxon_patient_mean_error": {
+            "statistic": 4.0,
+            "two_sided_p": 0.4375,
+            "holm_p_across_all_tests": 1.0
+          }
+        },
+        "20260823": {
+          "patients": 5,
+          "relations": 34,
+          "direct_patient_mean_mae_mm": 2.751126200358073,
+          "relmeasure3d_patient_mean_mae_mm": 1.928539459705353,
+          "direct_minus_relmeasure3d_mm": 0.8225867406527202,
+          "relative_improvement_percent": 29.900000245196182,
+          "patient_bootstrap_ci95_mm": [
+            0.12157441645860674,
+            1.7284203628698986
+          ],
+          "improvement_probability": 1.0,
+          "median_patient_delta_mm": 0.20608573406934738,
+          "wilcoxon_patient_mean_error": {
+            "statistic": 0.0,
+            "two_sided_p": 0.0625,
+            "holm_p_across_all_tests": 0.25
+          }
+        }
+      },
+      "hierarchical_across_seed_patient_bootstrap": {
+        "estimand": "mean across seeds of patient-mean Direct minus RelMeasure3D absolute error",
+        "observed_mean_delta_mm": 1.4322565299106966,
+        "observed_seed_std_mm": 0.8475339373749265,
+        "hierarchical_bootstrap_ci95_mm": [
+          -0.014050346735036965,
+          3.680335222362639
+        ],
+        "improvement_probability": 0.9731,
+        "repetitions": 20000
+      },
+      "distance_regimes": {
+        "contact_0": {
+          "patients": 1,
+          "relations": 2,
+          "direct_mae_mm_mean_across_seeds": 0.3711499522129695,
+          "relmeasure3d_mae_mm_mean_across_seeds": 0.1650745254009962,
+          "direct_minus_relmeasure3d_mm": 0.20607542681197324,
+          "relative_improvement_percent": 55.52349544523857,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 0.3447845131158829,
+              "relmeasure3d_mae_mm": 0.15134306997060776,
+              "delta_mm": 0.19344144314527512
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 0.5254864990711212,
+              "relmeasure3d_mae_mm": 0.07429958321154118,
+              "delta_mm": 0.45118691585958004
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 0.2431788444519043,
+              "relmeasure3d_mae_mm": 0.2695809230208397,
+              "delta_mm": -0.026402078568935394
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            -0.026402078568935394,
+            0.45118691585958004
+          ],
+          "improvement_probability": 0.96125
+        },
+        "0_to_2_mm": {
+          "patients": 4,
+          "relations": 19,
+          "direct_mae_mm_mean_across_seeds": 0.9059406814345142,
+          "relmeasure3d_mae_mm_mean_across_seeds": 1.2154354884436256,
+          "direct_minus_relmeasure3d_mm": -0.30949480700911136,
+          "relative_improvement_percent": -34.16281146785913,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 0.9231973988445181,
+              "relmeasure3d_mae_mm": 1.4427074872349437,
+              "delta_mm": -0.5195100883904256
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 0.6122908960831793,
+              "relmeasure3d_mae_mm": 1.4597454482787533,
+              "delta_mm": -0.847454552195574
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 1.1823337493758452,
+              "relmeasure3d_mae_mm": 0.7438535298171797,
+              "delta_mm": 0.43848021955866556
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            -1.4918108973729736,
+            0.41145873181832254
+          ],
+          "improvement_probability": 0.1995
+        },
+        "2_to_5_mm": {
+          "patients": 4,
+          "relations": 6,
+          "direct_mae_mm_mean_across_seeds": 2.00749479730924,
+          "relmeasure3d_mae_mm_mean_across_seeds": 1.7502948575549653,
+          "direct_minus_relmeasure3d_mm": 0.2571999397542741,
+          "relative_improvement_percent": 12.811985370971515,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 1.814074198404948,
+              "relmeasure3d_mae_mm": 1.409522811571757,
+              "delta_mm": 0.4045513868331909
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 2.0384571651617684,
+              "relmeasure3d_mae_mm": 0.9719298680623373,
+              "delta_mm": 1.066527297099431
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 2.1699530283610025,
+              "relmeasure3d_mae_mm": 2.8694318930308023,
+              "delta_mm": -0.6994788646697998
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            -2.9552698370069264,
+            1.5410160454610982
+          ],
+          "improvement_probability": 0.52985
+        },
+        "5_to_10_mm": {
+          "patients": 2,
+          "relations": 3,
+          "direct_mae_mm_mean_across_seeds": 3.801764556103283,
+          "relmeasure3d_mae_mm_mean_across_seeds": 3.8611060865223408,
+          "direct_minus_relmeasure3d_mm": -0.05934153041905802,
+          "relative_improvement_percent": -1.5608944095128725,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 2.9555489122867584,
+              "relmeasure3d_mae_mm": 3.825733798245589,
+              "delta_mm": -0.8701848859588304
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 4.016280114650726,
+              "relmeasure3d_mae_mm": 3.271640930324793,
+              "delta_mm": 0.7446391843259335
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 4.433464641372363,
+              "relmeasure3d_mae_mm": 4.48594353099664,
+              "delta_mm": -0.05247888962427716
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            -0.7777023787299792,
+            0.5872493715335926
+          ],
+          "improvement_probability": 0.35305
+        },
+        "over_10_mm": {
+          "patients": 2,
+          "relations": 4,
+          "direct_mae_mm_mean_across_seeds": 10.815920347968737,
+          "relmeasure3d_mae_mm_mean_across_seeds": 2.9502068758010864,
+          "direct_minus_relmeasure3d_mm": 7.865713472167651,
+          "relative_improvement_percent": 72.72347816101343,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 9.629005670547485,
+              "relmeasure3d_mae_mm": 3.378225088119507,
+              "delta_mm": 6.2507805824279785
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 15.540516957640648,
+              "relmeasure3d_mae_mm": 2.3140615224838257,
+              "delta_mm": 13.226455435156822
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 7.278238415718079,
+              "relmeasure3d_mae_mm": 3.1583340167999268,
+              "delta_mm": 4.119904398918152
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            -0.5973454051547581,
+            11.571495629019209
+          ],
+          "improvement_probability": 0.96615
+        }
+      }
+    },
+    "totalseg_pancreas_aorta": {
+      "label": "TotalSegmentator pancreas–aorta",
+      "role": "in_domain",
+      "ground_truth_profile": {
+        "patients": 48,
+        "relations": 48,
+        "zero_distance_count": 0,
+        "zero_distance_percent": 0.0,
+        "mean_mm": 10.307948293785254,
+        "std_mm": 6.966397438869584,
+        "quantiles_mm": {
+          "min": 1.0606566667556763,
+          "p25": 5.242101788520813,
+          "median": 8.964249610900879,
+          "p75": 13.634453535079956,
+          "p95": 22.035622978210448,
+          "max": 28.5
+        }
+      },
+      "per_seed_patient_statistics": {
+        "20260821": {
+          "patients": 48,
+          "relations": 48,
+          "direct_patient_mean_mae_mm": 4.437414554258187,
+          "relmeasure3d_patient_mean_mae_mm": 1.9222531641523044,
+          "direct_minus_relmeasure3d_mm": 2.515161390105883,
+          "relative_improvement_percent": 56.68078470812039,
+          "patient_bootstrap_ci95_mm": [
+            1.2219744741295775,
+            3.81608810853213
+          ],
+          "improvement_probability": 1.0,
+          "median_patient_delta_mm": 2.1561732292175293,
+          "wilcoxon_patient_mean_error": {
+            "statistic": 225.0,
+            "two_sided_p": 0.00010967174707587901,
+            "holm_p_across_all_tests": 0.000987045723682911
+          }
+        },
+        "20260822": {
+          "patients": 48,
+          "relations": 48,
+          "direct_patient_mean_mae_mm": 4.245027797917525,
+          "relmeasure3d_patient_mean_mae_mm": 2.0346452643473945,
+          "direct_minus_relmeasure3d_mm": 2.210382533570131,
+          "relative_improvement_percent": 52.06991894504139,
+          "patient_bootstrap_ci95_mm": [
+            1.3459767589966456,
+            3.0888062886893723
+          ],
+          "improvement_probability": 1.0,
+          "median_patient_delta_mm": 1.6341670751571655,
+          "wilcoxon_patient_mean_error": {
+            "statistic": 168.5,
+            "two_sided_p": 1.6876812481265598e-05,
+            "holm_p_across_all_tests": 0.00016876812481265597
+          }
+        },
+        "20260823": {
+          "patients": 48,
+          "relations": 48,
+          "direct_patient_mean_mae_mm": 3.890572297076384,
+          "relmeasure3d_patient_mean_mae_mm": 2.068701190253099,
+          "direct_minus_relmeasure3d_mm": 1.8218711068232853,
+          "relative_improvement_percent": 46.82784350755676,
+          "patient_bootstrap_ci95_mm": [
+            0.6036593091363709,
+            2.950723323784768
+          ],
+          "improvement_probability": 0.99755,
+          "median_patient_delta_mm": 1.6370581984519958,
+          "wilcoxon_patient_mean_error": {
+            "statistic": 254.0,
+            "two_sided_p": 0.0006131978795855083,
+            "holm_p_across_all_tests": 0.004292385157098558
+          }
+        }
+      },
+      "hierarchical_across_seed_patient_bootstrap": {
+        "estimand": "mean across seeds of patient-mean Direct minus RelMeasure3D absolute error",
+        "observed_mean_delta_mm": 2.1824716768331,
+        "observed_seed_std_mm": 0.34748685754480335,
+        "hierarchical_bootstrap_ci95_mm": [
+          1.450494298959772,
+          2.9215363379981785
+        ],
+        "improvement_probability": 1.0,
+        "repetitions": 20000
+      },
+      "distance_regimes": {
+        "contact_0": {
+          "relations": 0,
+          "patients": 0
+        },
+        "0_to_2_mm": {
+          "patients": 3,
+          "relations": 3,
+          "direct_mae_mm_mean_across_seeds": 3.034925659497579,
+          "relmeasure3d_mae_mm_mean_across_seeds": 0.38949655161963576,
+          "direct_minus_relmeasure3d_mm": 2.645429107877943,
+          "relative_improvement_percent": 87.16619135626156,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 3.210622032483419,
+              "relmeasure3d_mae_mm": 0.6646813948949178,
+              "delta_mm": 2.545940637588501
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 4.432561119397481,
+              "relmeasure3d_mae_mm": 0.42477389176686603,
+              "delta_mm": 4.007787227630615
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 1.4615938266118367,
+              "relmeasure3d_mae_mm": 0.07903436819712321,
+              "delta_mm": 1.3825594584147134
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            1.4027845462163289,
+            4.1471675634384155
+          ],
+          "improvement_probability": 1.0
+        },
+        "2_to_5_mm": {
+          "patients": 9,
+          "relations": 9,
+          "direct_mae_mm_mean_across_seeds": 4.788708448410034,
+          "relmeasure3d_mae_mm_mean_across_seeds": 0.9376190812499434,
+          "direct_minus_relmeasure3d_mm": 3.8510893671600908,
+          "relative_improvement_percent": 80.42020951262431,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 5.342599153518677,
+              "relmeasure3d_mae_mm": 0.791510608461168,
+              "delta_mm": 4.5510885450575085
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 5.540070560243395,
+              "relmeasure3d_mae_mm": 0.9640921089384291,
+              "delta_mm": 4.575978451304966
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 3.483455631468031,
+              "relmeasure3d_mae_mm": 1.0572545263502333,
+              "delta_mm": 2.426201105117798
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            2.159883810855724,
+            5.635126940519719
+          ],
+          "improvement_probability": 1.0
+        },
+        "5_to_10_mm": {
+          "patients": 14,
+          "relations": 14,
+          "direct_mae_mm_mean_across_seeds": 2.9788640964598883,
+          "relmeasure3d_mae_mm_mean_across_seeds": 1.989966222218105,
+          "direct_minus_relmeasure3d_mm": 0.9888978742417835,
+          "relative_improvement_percent": 33.19714636921502,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 2.541752508708409,
+              "relmeasure3d_mae_mm": 1.9782195772443498,
+              "delta_mm": 0.5635329314640591
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 3.6217882292611256,
+              "relmeasure3d_mae_mm": 2.1163592679159984,
+              "delta_mm": 1.5054289613451273
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 2.77305155141013,
+              "relmeasure3d_mae_mm": 1.8753198214939661,
+              "delta_mm": 0.897731729916164
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            -0.04099825507118586,
+            2.050647970892133
+          ],
+          "improvement_probability": 0.97015
+        },
+        "over_10_mm": {
+          "patients": 22,
+          "relations": 22,
+          "direct_mae_mm_mean_across_seeds": 4.8754992737914575,
+          "relmeasure3d_mae_mm_mean_across_seeds": 2.679227518312859,
+          "direct_minus_relmeasure3d_mm": 2.1962717554785987,
+          "relative_improvement_percent": 45.04711481108799,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 5.440732045607134,
+              "relmeasure3d_mae_mm": 2.5207017335024746,
+              "delta_mm": 2.920030312104659
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 4.086271849545565,
+              "relmeasure3d_mae_mm": 2.6401269219138404,
+              "delta_mm": 1.446144927631725
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 5.099493926221674,
+              "relmeasure3d_mae_mm": 2.8768538995222612,
+              "delta_mm": 2.222640026699413
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            1.0070204011418602,
+            3.5562261222889933
+          ],
+          "improvement_probability": 0.99975
+        }
+      }
+    },
+    "amos_pancreas_aorta": {
+      "label": "AMOS22 pancreas–aorta",
+      "role": "in_domain",
+      "ground_truth_profile": {
+        "patients": 100,
+        "relations": 100,
+        "zero_distance_count": 7,
+        "zero_distance_percent": 7.000000000000001,
+        "mean_mm": 6.4219213902950285,
+        "std_mm": 5.305446175202121,
+        "quantiles_mm": {
+          "min": 0.0,
+          "p25": 1.9183281362056732,
+          "median": 5.9775824546813965,
+          "p75": 9.615860223770142,
+          "p95": 14.318789815902708,
+          "max": 31.035627365112305
+        }
+      },
+      "per_seed_patient_statistics": {
+        "20260821": {
+          "patients": 100,
+          "relations": 100,
+          "direct_patient_mean_mae_mm": 3.6204275381565094,
+          "relmeasure3d_patient_mean_mae_mm": 2.0988598565757273,
+          "direct_minus_relmeasure3d_mm": 1.521567681580782,
+          "relative_improvement_percent": 42.02729278640807,
+          "patient_bootstrap_ci95_mm": [
+            0.9625067417174579,
+            2.060603072170168
+          ],
+          "improvement_probability": 1.0,
+          "median_patient_delta_mm": 1.3252204656600952,
+          "wilcoxon_patient_mean_error": {
+            "statistic": 1061.0,
+            "two_sided_p": 4.810833685355619e-07,
+            "holm_p_across_all_tests": 6.2540837909623055e-06
+          }
+        },
+        "20260822": {
+          "patients": 100,
+          "relations": 100,
+          "direct_patient_mean_mae_mm": 3.630941425561905,
+          "relmeasure3d_patient_mean_mae_mm": 1.9275935932578432,
+          "direct_minus_relmeasure3d_mm": 1.7033478323040618,
+          "relative_improvement_percent": 46.912016269732604,
+          "patient_bootstrap_ci95_mm": [
+            1.1328023589521854,
+            2.2707695203280998
+          ],
+          "improvement_probability": 1.0,
+          "median_patient_delta_mm": 1.3869991302490234,
+          "wilcoxon_patient_mean_error": {
+            "statistic": 968.0,
+            "two_sided_p": 8.628249618279228e-08,
+            "holm_p_across_all_tests": 1.2698581916358174e-06
+          }
+        },
+        "20260823": {
+          "patients": 100,
+          "relations": 100,
+          "direct_patient_mean_mae_mm": 3.7450757849216463,
+          "relmeasure3d_patient_mean_mae_mm": 1.8251809577271343,
+          "direct_minus_relmeasure3d_mm": 1.919894827194512,
+          "relative_improvement_percent": 51.26451205405125,
+          "patient_bootstrap_ci95_mm": [
+            1.2885101947821678,
+            2.5575684906095257
+          ],
+          "improvement_probability": 1.0,
+          "median_patient_delta_mm": 1.823106288909912,
+          "wilcoxon_patient_mean_error": {
+            "statistic": 967.0,
+            "two_sided_p": 8.465721277572117e-08,
+            "holm_p_across_all_tests": 1.2698581916358174e-06
+          }
+        }
+      },
+      "hierarchical_across_seed_patient_bootstrap": {
+        "estimand": "mean across seeds of patient-mean Direct minus RelMeasure3D absolute error",
+        "observed_mean_delta_mm": 1.7149367803597853,
+        "observed_seed_std_mm": 0.1994162895075879,
+        "hierarchical_bootstrap_ci95_mm": [
+          1.3373470033221304,
+          2.103181164865071
+        ],
+        "improvement_probability": 1.0,
+        "repetitions": 20000
+      },
+      "distance_regimes": {
+        "contact_0": {
+          "patients": 7,
+          "relations": 7,
+          "direct_mae_mm_mean_across_seeds": 3.7707091626666838,
+          "relmeasure3d_mae_mm_mean_across_seeds": 1.4387789035570762,
+          "direct_minus_relmeasure3d_mm": 2.331930259109608,
+          "relative_improvement_percent": 61.84328089256407,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 4.2671903882707864,
+              "relmeasure3d_mae_mm": 1.970492273569107,
+              "delta_mm": 2.2966981147016794
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 4.053422314780099,
+              "relmeasure3d_mae_mm": 1.023947216171239,
+              "delta_mm": 3.0294750986088603
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 2.9915147849491666,
+              "relmeasure3d_mae_mm": 1.3218972209308828,
+              "delta_mm": 1.6696175640182838
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            1.1651837578436937,
+            3.399314415571279
+          ],
+          "improvement_probability": 0.99985
+        },
+        "0_to_2_mm": {
+          "patients": 20,
+          "relations": 20,
+          "direct_mae_mm_mean_across_seeds": 3.8559664388497676,
+          "relmeasure3d_mae_mm_mean_across_seeds": 1.308324196042789,
+          "direct_minus_relmeasure3d_mm": 2.5476422428069783,
+          "relative_improvement_percent": 66.07013528797565,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 4.386733883619309,
+              "relmeasure3d_mae_mm": 1.1972939886152745,
+              "delta_mm": 3.1894398950040346
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 4.302260440587998,
+              "relmeasure3d_mae_mm": 1.3471997755830671,
+              "delta_mm": 2.9550606650049307
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 2.878904992341995,
+              "relmeasure3d_mae_mm": 1.3804788239300252,
+              "delta_mm": 1.49842616841197
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            1.5412707892867428,
+            3.436704848284522
+          ],
+          "improvement_probability": 1.0
+        },
+        "2_to_5_mm": {
+          "patients": 18,
+          "relations": 18,
+          "direct_mae_mm_mean_across_seeds": 2.1683039532767405,
+          "relmeasure3d_mae_mm_mean_across_seeds": 1.6309329828730335,
+          "direct_minus_relmeasure3d_mm": 0.5373709704037067,
+          "relative_improvement_percent": 24.783009300501057,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 2.5874960554970636,
+              "relmeasure3d_mae_mm": 1.3255450427532196,
+              "delta_mm": 1.261951012743844
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 2.4665975835588245,
+              "relmeasure3d_mae_mm": 1.664388217859798,
+              "delta_mm": 0.8022093656990266
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 1.4508182207743328,
+              "relmeasure3d_mae_mm": 1.9028656880060832,
+              "delta_mm": -0.4520474672317505
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            -0.48792571915244615,
+            1.4613937480858077
+          ],
+          "improvement_probability": 0.85105
+        },
+        "5_to_10_mm": {
+          "patients": 31,
+          "relations": 31,
+          "direct_mae_mm_mean_across_seeds": 1.8480394912022415,
+          "relmeasure3d_mae_mm_mean_across_seeds": 1.689342453915586,
+          "direct_minus_relmeasure3d_mm": 0.15869703728665585,
+          "relative_improvement_percent": 8.58731850927144,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 1.4181064790295017,
+              "relmeasure3d_mae_mm": 1.557502519699835,
+              "delta_mm": -0.1393960406703334
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 1.6501026845747424,
+              "relmeasure3d_mae_mm": 1.8338245922519314,
+              "delta_mm": -0.183721907677189
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 2.4759093100024807,
+              "relmeasure3d_mae_mm": 1.6767002497949908,
+              "delta_mm": 0.7992090602074899
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            -0.4617181991377185,
+            0.8790276528686594
+          ],
+          "improvement_probability": 0.6571
+        },
+        "over_10_mm": {
+          "patients": 24,
+          "relations": 24,
+          "direct_mae_mm_mean_across_seeds": 6.946465416087045,
+          "relmeasure3d_mae_mm_mean_across_seeds": 3.2120889267987676,
+          "direct_minus_relmeasure3d_mm": 3.734376489288277,
+          "relative_improvement_percent": 53.759376396519336,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 6.412563065687816,
+              "relmeasure3d_mae_mm": 4.166844628751278,
+              "delta_mm": 2.2457184369365377
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 6.380126575628917,
+              "relmeasure3d_mae_mm": 2.993340959151586,
+              "delta_mm": 3.3867856164773307
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 8.046706606944403,
+              "relmeasure3d_mae_mm": 2.4760811924934387,
+              "delta_mm": 5.570625414450964
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            2.0660561379045244,
+            5.541789722277057
+          ],
+          "improvement_probability": 1.0
+        }
+      }
+    },
+    "totalseg_to_amos": {
+      "label": "TotalSegmentator→AMOS22 locked transfer",
+      "role": "locked_transfer",
+      "ground_truth_profile": {
+        "patients": 100,
+        "relations": 100,
+        "zero_distance_count": 7,
+        "zero_distance_percent": 7.000000000000001,
+        "mean_mm": 6.4219213902950285,
+        "std_mm": 5.305446175202121,
+        "quantiles_mm": {
+          "min": 0.0,
+          "p25": 1.9183281362056732,
+          "median": 5.9775824546813965,
+          "p75": 9.615860223770142,
+          "p95": 14.318789815902708,
+          "max": 31.035627365112305
+        }
+      },
+      "per_seed_patient_statistics": {
+        "20260821": {
+          "patients": 100,
+          "relations": 100,
+          "direct_patient_mean_mae_mm": 3.5808227813243865,
+          "relmeasure3d_patient_mean_mae_mm": 2.130181926488876,
+          "direct_minus_relmeasure3d_mm": 1.4506408548355103,
+          "relative_improvement_percent": 40.51138365185956,
+          "patient_bootstrap_ci95_mm": [
+            0.9503633607327937,
+            1.9676351673603052
+          ],
+          "improvement_probability": 1.0,
+          "median_patient_delta_mm": 1.1825618743896484,
+          "wilcoxon_patient_mean_error": {
+            "statistic": 1033.0,
+            "two_sided_p": 4.828685188028949e-07,
+            "holm_p_across_all_tests": 6.2540837909623055e-06
+          }
+        },
+        "20260822": {
+          "patients": 100,
+          "relations": 100,
+          "direct_patient_mean_mae_mm": 3.9996578323841097,
+          "relmeasure3d_patient_mean_mae_mm": 1.8578838050365447,
+          "direct_minus_relmeasure3d_mm": 2.1417740273475645,
+          "relative_improvement_percent": 53.54893136123345,
+          "patient_bootstrap_ci95_mm": [
+            1.6715267299413683,
+            2.6261606523394576
+          ],
+          "improvement_probability": 1.0,
+          "median_patient_delta_mm": 1.8904438018798828,
+          "wilcoxon_patient_mean_error": {
+            "statistic": 451.0,
+            "two_sided_p": 1.6137360271561114e-12,
+            "holm_p_across_all_tests": 2.9047248488810005e-11
+          }
+        },
+        "20260823": {
+          "patients": 100,
+          "relations": 100,
+          "direct_patient_mean_mae_mm": 3.2725642776489257,
+          "relmeasure3d_patient_mean_mae_mm": 2.1288550305366516,
+          "direct_minus_relmeasure3d_mm": 1.143709247112274,
+          "relative_improvement_percent": 34.948412012060984,
+          "patient_bootstrap_ci95_mm": [
+            0.6517429011464119,
+            1.646085008233785
+          ],
+          "improvement_probability": 1.0,
+          "median_patient_delta_mm": 0.8487374782562256,
+          "wilcoxon_patient_mean_error": {
+            "statistic": 1388.0,
+            "two_sided_p": 0.00014827253751372794,
+            "holm_p_across_all_tests": 0.0011861803001098235
+          }
+        }
+      },
+      "hierarchical_across_seed_patient_bootstrap": {
+        "estimand": "mean across seeds of patient-mean Direct minus RelMeasure3D absolute error",
+        "observed_mean_delta_mm": 1.5787080430984497,
+        "observed_seed_std_mm": 0.5112085972660387,
+        "hierarchical_bootstrap_ci95_mm": [
+          1.059924757540226,
+          2.148168111115694
+        ],
+        "improvement_probability": 1.0,
+        "repetitions": 20000
+      },
+      "distance_regimes": {
+        "contact_0": {
+          "patients": 7,
+          "relations": 7,
+          "direct_mae_mm_mean_across_seeds": 4.355758127712068,
+          "relmeasure3d_mae_mm_mean_across_seeds": 2.430712904248919,
+          "direct_minus_relmeasure3d_mm": 1.9250452234631492,
+          "relative_improvement_percent": 44.195411384660844,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 4.451010874339512,
+              "relmeasure3d_mae_mm": 2.7322127648762295,
+              "delta_mm": 1.7187981094632825
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 5.888474328177316,
+              "relmeasure3d_mae_mm": 1.950396146093096,
+              "delta_mm": 3.9380781820842197
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 2.727789180619376,
+              "relmeasure3d_mae_mm": 2.609529801777431,
+              "delta_mm": 0.11825937884194504
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            0.1824258245172955,
+            3.852678294266972
+          ],
+          "improvement_probability": 0.98805
+        },
+        "0_to_2_mm": {
+          "patients": 20,
+          "relations": 20,
+          "direct_mae_mm_mean_across_seeds": 4.6173271358013155,
+          "relmeasure3d_mae_mm_mean_across_seeds": 2.5733326355616253,
+          "direct_minus_relmeasure3d_mm": 2.0439945002396898,
+          "relative_improvement_percent": 44.26791605020128,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 4.419219332933426,
+              "relmeasure3d_mae_mm": 2.829722011089325,
+              "delta_mm": 1.5894973218441009
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 5.825170487165451,
+              "relmeasure3d_mae_mm": 2.3042675614356996,
+              "delta_mm": 3.5209029257297515
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 3.607591587305069,
+              "relmeasure3d_mae_mm": 2.586008334159851,
+              "delta_mm": 1.0215832531452178
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            0.8978687391181787,
+            3.4408077642321566
+          ],
+          "improvement_probability": 1.0
+        },
+        "2_to_5_mm": {
+          "patients": 18,
+          "relations": 18,
+          "direct_mae_mm_mean_across_seeds": 3.759677405710574,
+          "relmeasure3d_mae_mm_mean_across_seeds": 2.444347690652918,
+          "direct_minus_relmeasure3d_mm": 1.3153297150576557,
+          "relative_improvement_percent": 34.98517487324315,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 3.6970612737867565,
+              "relmeasure3d_mae_mm": 2.5420638720194497,
+              "delta_mm": 1.1549974017673068
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 4.862417896588643,
+              "relmeasure3d_mae_mm": 2.0104683770073786,
+              "delta_mm": 2.8519495195812645
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 2.7195530467563205,
+              "relmeasure3d_mae_mm": 2.7805108229319253,
+              "delta_mm": -0.06095777617560483
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            -0.08973258711673593,
+            2.8125993207648943
+          ],
+          "improvement_probability": 0.96145
+        },
+        "5_to_10_mm": {
+          "patients": 31,
+          "relations": 31,
+          "direct_mae_mm_mean_across_seeds": 2.472005369842693,
+          "relmeasure3d_mae_mm_mean_across_seeds": 1.6477431994612497,
+          "direct_minus_relmeasure3d_mm": 0.8242621703814436,
+          "relative_improvement_percent": 33.34386649952527,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 2.052224866805538,
+              "relmeasure3d_mae_mm": 1.5544829522409747,
+              "delta_mm": 0.4977419145645632
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 2.803017585508285,
+              "relmeasure3d_mae_mm": 1.5874958499785392,
+              "delta_mm": 1.2155217355297459
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 2.560773657214257,
+              "relmeasure3d_mae_mm": 1.8012507961642357,
+              "delta_mm": 0.7595228610500213
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            0.23141917208189602,
+            1.4206262654514707
+          ],
+          "improvement_probability": 0.99735
+        },
+        "over_10_mm": {
+          "patients": 24,
+          "relations": 24,
+          "direct_mae_mm_mean_across_seeds": 3.942706402805116,
+          "relmeasure3d_mae_mm_mean_across_seeds": 1.6807257533073425,
+          "direct_minus_relmeasure3d_mm": 2.2619806494977737,
+          "relative_improvement_percent": 57.3712678146271,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 4.51561423142751,
+              "relmeasure3d_mae_mm": 1.8063392440478008,
+              "delta_mm": 2.7092749873797093
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 2.8260827461878457,
+              "relmeasure3d_mae_mm": 1.6937272548675537,
+              "delta_mm": 1.132355491320292
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 4.486422230799993,
+              "relmeasure3d_mae_mm": 1.542110761006673,
+              "delta_mm": 2.9443114697933197
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            1.1702222579055364,
+            3.3168568322228045
+          ],
+          "improvement_probability": 1.0
+        }
+      }
+    },
+    "msd_tumour_vessel": {
+      "label": "MSD Task08 tumour–hepatic vessel",
+      "role": "degenerate_negative_control",
+      "ground_truth_profile": {
+        "patients": 30,
+        "relations": 30,
+        "zero_distance_count": 21,
+        "zero_distance_percent": 70.0,
+        "mean_mm": 2.1745627959569296,
+        "std_mm": 5.08928224865981,
+        "quantiles_mm": {
+          "min": 0.0,
+          "p25": 0.0,
+          "median": 0.0,
+          "p75": 1.456187129020691,
+          "p95": 14.112764263153046,
+          "max": 20.0
+        }
+      },
+      "per_seed_patient_statistics": {
+        "20260821": {
+          "patients": 30,
+          "relations": 30,
+          "direct_patient_mean_mae_mm": 2.3030468513568243,
+          "relmeasure3d_patient_mean_mae_mm": 2.964958397543766,
+          "direct_minus_relmeasure3d_mm": -0.6619115461869417,
+          "relative_improvement_percent": -28.740689569427605,
+          "patient_bootstrap_ci95_mm": [
+            -1.5743954820731474,
+            0.1024330528445036
+          ],
+          "improvement_probability": 0.0504,
+          "median_patient_delta_mm": 0.11144409328699112,
+          "wilcoxon_patient_mean_error": {
+            "statistic": 212.0,
+            "two_sided_p": 0.685047073289752,
+            "holm_p_across_all_tests": 1.0
+          }
+        },
+        "20260822": {
+          "patients": 30,
+          "relations": 30,
+          "direct_patient_mean_mae_mm": 2.290767808755239,
+          "relmeasure3d_patient_mean_mae_mm": 2.193884542599941,
+          "direct_minus_relmeasure3d_mm": 0.09688326615529756,
+          "relative_improvement_percent": 4.229292282919855,
+          "patient_bootstrap_ci95_mm": [
+            0.014119545258969694,
+            0.1747244924504775
+          ],
+          "improvement_probability": 0.9886,
+          "median_patient_delta_mm": 0.13661627285182476,
+          "wilcoxon_patient_mean_error": {
+            "statistic": 126.0,
+            "two_sided_p": 0.027741437777876854,
+            "holm_p_across_all_tests": 0.16644862666726112
+          }
+        },
+        "20260823": {
+          "patients": 30,
+          "relations": 30,
+          "direct_patient_mean_mae_mm": 2.287083506087462,
+          "relmeasure3d_patient_mean_mae_mm": 2.0973378087670427,
+          "direct_minus_relmeasure3d_mm": 0.18974569732041952,
+          "relative_improvement_percent": 8.296404430156532,
+          "patient_bootstrap_ci95_mm": [
+            0.017049326077709953,
+            0.4341397641704315
+          ],
+          "improvement_probability": 0.98805,
+          "median_patient_delta_mm": 0.2224203293735627,
+          "wilcoxon_patient_mean_error": {
+            "statistic": 128.0,
+            "two_sided_p": 0.03098480962216854,
+            "holm_p_across_all_tests": 0.16644862666726112
+          }
+        }
+      },
+      "hierarchical_across_seed_patient_bootstrap": {
+        "estimand": "mean across seeds of patient-mean Direct minus RelMeasure3D absolute error",
+        "observed_mean_delta_mm": -0.12509419423707488,
+        "observed_seed_std_mm": 0.46721034855440075,
+        "hierarchical_bootstrap_ci95_mm": [
+          -0.7398304280869727,
+          0.22961205657963998
+        ],
+        "improvement_probability": 0.3955,
+        "repetitions": 20000
+      },
+      "distance_regimes": {
+        "contact_0": {
+          "patients": 21,
+          "relations": 21,
+          "direct_mae_mm_mean_across_seeds": 0.30040332745938075,
+          "relmeasure3d_mae_mm_mean_across_seeds": 0.4768482490179604,
+          "direct_minus_relmeasure3d_mm": -0.17644492155857963,
+          "relative_improvement_percent": -58.7360077036556,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 0.33686240088372005,
+              "relmeasure3d_mae_mm": 1.2672183983352927,
+              "delta_mm": -0.9303559974515727
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 0.2938565200283414,
+              "relmeasure3d_mae_mm": 0.09611783773150473,
+              "delta_mm": 0.19773868229683667
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 0.2704910614660808,
+              "relmeasure3d_mae_mm": 0.06720851098708365,
+              "delta_mm": 0.20328255047899718
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            -1.0190135347935703,
+            0.22842733941531998
+          ],
+          "improvement_probability": 0.37095
+        },
+        "0_to_2_mm": {
+          "patients": 3,
+          "relations": 3,
+          "direct_mae_mm_mean_across_seeds": 1.234876326388783,
+          "relmeasure3d_mae_mm_mean_across_seeds": 1.6862917904590076,
+          "direct_minus_relmeasure3d_mm": -0.45141546407022454,
+          "relative_improvement_percent": -36.55552012972212,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 1.216212938229243,
+              "relmeasure3d_mae_mm": 2.210758383075396,
+              "delta_mm": -0.994545444846153
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 1.2382749716440837,
+              "relmeasure3d_mae_mm": 1.3991573465367158,
+              "delta_mm": -0.16088237489263202
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 1.2501410692930222,
+              "relmeasure3d_mae_mm": 1.4489596417649107,
+              "delta_mm": -0.1988185724718885
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            -1.3436327084281299,
+            -0.09636552463214483
+          ],
+          "improvement_probability": 0.0002
+        },
+        "2_to_5_mm": {
+          "patients": 1,
+          "relations": 1,
+          "direct_mae_mm_mean_across_seeds": 2.551001230875651,
+          "relmeasure3d_mae_mm_mean_across_seeds": 2.9609033827825137,
+          "direct_minus_relmeasure3d_mm": -0.40990215190686285,
+          "relative_improvement_percent": -16.06828514803032,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 2.480031967163086,
+              "relmeasure3d_mae_mm": 2.9855700514744967,
+              "delta_mm": -0.5055380843114108
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 2.518536388874054,
+              "relmeasure3d_mae_mm": 2.9193167611956596,
+              "delta_mm": -0.4007803723216057
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 2.6544353365898132,
+              "relmeasure3d_mae_mm": 2.9778233356773853,
+              "delta_mm": -0.3233879990875721
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            -0.5055380843114108,
+            -0.3233879990875721
+          ],
+          "improvement_probability": 0.0
+        },
+        "5_to_10_mm": {
+          "patients": 3,
+          "relations": 3,
+          "direct_mae_mm_mean_across_seeds": 6.037767108943728,
+          "relmeasure3d_mae_mm_mean_across_seeds": 5.368779418265654,
+          "direct_minus_relmeasure3d_mm": 0.6689876906780734,
+          "relative_improvement_percent": 11.080051260789832,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 5.948719571034114,
+              "relmeasure3d_mae_mm": 4.7116605043411255,
+              "delta_mm": 1.2370590666929884
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 6.049859205881755,
+              "relmeasure3d_mae_mm": 6.201778004566829,
+              "delta_mm": -0.15191879868507385
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 6.114722549915314,
+              "relmeasure3d_mae_mm": 5.192899745889008,
+              "delta_mm": 0.9218228040263057
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            -0.2320900787081983,
+            2.0299258390441537
+          ],
+          "improvement_probability": 0.8461
+        },
+        "over_10_mm": {
+          "patients": 2,
+          "relations": 2,
+          "direct_mae_mm_mean_across_seeds": 19.065790124237537,
+          "relmeasure3d_mae_mm_mean_across_seeds": 19.210938625386916,
+          "direct_minus_relmeasure3d_mm": -0.14514850114937872,
+          "relative_improvement_percent": -0.7613033616941872,
+          "per_seed": [
+            {
+              "seed": 20260821,
+              "direct_mae_mm": 19.021232813596725,
+              "relmeasure3d_mae_mm": 19.292169423773885,
+              "delta_mm": -0.2709366101771593
+            },
+            {
+              "seed": 20260822,
+              "direct_mae_mm": 19.084554210305214,
+              "relmeasure3d_mae_mm": 19.037969435565174,
+              "delta_mm": 0.0465847747400403
+            },
+            {
+              "seed": 20260823,
+              "direct_mae_mm": 19.091583348810673,
+              "relmeasure3d_mae_mm": 19.30267701682169,
+              "delta_mm": -0.21109366801101714
+            }
+          ],
+          "hierarchical_bootstrap_ci95_mm": [
+            -0.2905753490825494,
+            0.06870786069581906
+          ],
+          "improvement_probability": 0.09305
+        }
+      }
+    }
+  },
+  "summary_only_settings": {
+    "scanner_holdout": {
+      "label": "ToothFairy3 P/F→S scanner holdout",
+      "reason": "Legacy evaluation retained patient-clustered bootstrap summaries but not per-case rows; no retrospective reconstruction was used.",
+      "reported_summary": {
+        "status": "complete",
+        "runs": [
+          {
+            "seed": 20260821,
+            "splits": {
+              "validation": {
+                "patients": 45,
+                "relations": 306,
+                "direct": {
+                  "mae_mm": 1.3998140239345482,
+                  "median_ae_mm": 1.1853541731834412,
+                  "p90_ae_mm": 2.690115511417389,
+                  "p95_ae_mm": 3.4105591475963593,
+                  "bias_mm": -0.08131175312925787,
+                  "pearson_r": 0.6552827062450552
+                },
+                "refined": {
+                  "mae_mm": 0.91860342955862,
+                  "median_ae_mm": 0.6581666469573975,
+                  "p90_ae_mm": 1.9594095945358276,
+                  "p95_ae_mm": 2.4583400189876556,
+                  "bias_mm": 0.1357741783939156,
+                  "pearson_r": 0.8262212397843111
+                },
+                "paired": {
+                  "direct_minus_refined_mae_mm": 0.4812105943759282,
+                  "patient_bootstrap_ci95_low_mm": 0.38890950023539483,
+                  "patient_bootstrap_ci95_high_mm": 0.5755836203600667,
+                  "improvement_probability": 1.0
+                }
+              },
+              "calibration": {
+                "patients": 45,
+                "relations": 346,
+                "direct": {
+                  "mae_mm": 1.6379529782974651,
+                  "median_ae_mm": 1.1139622330665588,
+                  "p90_ae_mm": 2.997877061367035,
+                  "p95_ae_mm": 4.264220118522644,
+                  "bias_mm": -0.4552122474233539,
+                  "pearson_r": 0.5713234186591634
+                },
+                "refined": {
+                  "mae_mm": 1.0934746617375943,
+                  "median_ae_mm": 0.6715185046195984,
+                  "p90_ae_mm": 1.9647035598754883,
+                  "p95_ae_mm": 3.2169207334518433,
+                  "bias_mm": -0.21283558057351953,
+                  "pearson_r": 0.7744079653851844
+                },
+                "paired": {
+                  "direct_minus_refined_mae_mm": 0.5444783165598708,
+                  "patient_bootstrap_ci95_low_mm": 0.4076403814223611,
+                  "patient_bootstrap_ci95_high_mm": 0.7022437393202113,
+                  "improvement_probability": 1.0
+                }
+              },
+              "test": {
+                "patients": 49,
+                "relations": 358,
+                "direct": {
+                  "mae_mm": 1.3958776852521817,
+                  "median_ae_mm": 1.157394289970398,
+                  "p90_ae_mm": 2.8326326131820685,
+                  "p95_ae_mm": 3.2576511383056634,
+                  "bias_mm": -0.023295168811715516,
+                  "pearson_r": 0.64488638451753
+                },
+                "refined": {
+                  "mae_mm": 0.870059099178449,
+                  "median_ae_mm": 0.6951122283935547,
+                  "p90_ae_mm": 1.814877772331238,
+                  "p95_ae_mm": 2.379982304573059,
+                  "bias_mm": 0.24351886912202203,
+                  "pearson_r": 0.8749801243775716
+                },
+                "paired": {
+                  "direct_minus_refined_mae_mm": 0.5258185860737326,
+                  "patient_bootstrap_ci95_low_mm": 0.39684000732743474,
+                  "patient_bootstrap_ci95_high_mm": 0.6613376544286561,
+                  "improvement_probability": 1.0
+                }
+              }
+            }
+          },
+          {
+            "seed": 20260822,
+            "splits": {
+              "validation": {
+                "patients": 45,
+                "relations": 306,
+                "direct": {
+                  "mae_mm": 1.3676116848790567,
+                  "median_ae_mm": 1.1579497084021568,
+                  "p90_ae_mm": 2.6440205574035645,
+                  "p95_ae_mm": 3.190772831439972,
+                  "bias_mm": -0.10647814759826349,
+                  "pearson_r": 0.6737767556269216
+                },
+                "refined": {
+                  "mae_mm": 0.9568605522801673,
+                  "median_ae_mm": 0.7688131332397461,
+                  "p90_ae_mm": 1.8987942934036255,
+                  "p95_ae_mm": 2.35453462600708,
+                  "bias_mm": 0.21603807091128593,
+                  "pearson_r": 0.8280547711024162
+                },
+                "paired": {
+                  "direct_minus_refined_mae_mm": 0.4107511325988894,
+                  "patient_bootstrap_ci95_low_mm": 0.31168992123809564,
+                  "patient_bootstrap_ci95_high_mm": 0.5183360935467167,
+                  "improvement_probability": 1.0
+                }
+              },
+              "calibration": {
+                "patients": 45,
+                "relations": 346,
+                "direct": {
+                  "mae_mm": 1.517159436651737,
+                  "median_ae_mm": 1.0884766578674316,
+                  "p90_ae_mm": 2.4803262650966644,
+                  "p95_ae_mm": 3.994404911994934,
+                  "bias_mm": -0.31885700470450296,
+                  "pearson_r": 0.6335906061833888
+                },
+                "refined": {
+                  "mae_mm": 1.1129631490333576,
+                  "median_ae_mm": 0.7160685062408447,
+                  "p90_ae_mm": 1.8697913885116577,
+                  "p95_ae_mm": 2.4266985654830933,
+                  "bias_mm": -0.10692103157584378,
+                  "pearson_r": 0.778775396615749
+                },
+                "paired": {
+                  "direct_minus_refined_mae_mm": 0.4041962876183794,
+                  "patient_bootstrap_ci95_low_mm": 0.2694177408125761,
+                  "patient_bootstrap_ci95_high_mm": 0.5651676795876538,
+                  "improvement_probability": 1.0
+                }
+              },
+              "test": {
+                "patients": 49,
+                "relations": 358,
+                "direct": {
+                  "mae_mm": 1.3879698204844357,
+                  "median_ae_mm": 1.104984164237976,
+                  "p90_ae_mm": 3.078309965133667,
+                  "p95_ae_mm": 3.590990185737609,
+                  "bias_mm": -0.40579706184857384,
+                  "pearson_r": 0.6515439371409436
+                },
+                "refined": {
+                  "mae_mm": 0.8712843275686216,
+                  "median_ae_mm": 0.665514349937439,
+                  "p90_ae_mm": 1.9086602210998536,
+                  "p95_ae_mm": 2.346082174777984,
+                  "bias_mm": 0.3113789044362207,
+                  "pearson_r": 0.86250305440194
+                },
+                "paired": {
+                  "direct_minus_refined_mae_mm": 0.5166854929158141,
+                  "patient_bootstrap_ci95_low_mm": 0.3576359819531915,
+                  "patient_bootstrap_ci95_high_mm": 0.6810895393837594,
+                  "improvement_probability": 1.0
+                }
+              }
+            }
+          },
+          {
+            "seed": 20260823,
+            "splits": {
+              "validation": {
+                "patients": 45,
+                "relations": 306,
+                "direct": {
+                  "mae_mm": 1.4392980303542287,
+                  "median_ae_mm": 1.2325561046600342,
+                  "p90_ae_mm": 2.8936924934387207,
+                  "p95_ae_mm": 3.384775996208191,
+                  "bias_mm": -0.10294130468874975,
+                  "pearson_r": 0.6340877537655821
+                },
+                "refined": {
+                  "mae_mm": 0.9039441110943657,
+                  "median_ae_mm": 0.6660836935043335,
+                  "p90_ae_mm": 1.873241901397705,
+                  "p95_ae_mm": 2.2273160219192505,
+                  "bias_mm": 0.1327373503762133,
+                  "pearson_r": 0.8261573430599211
+                },
+                "paired": {
+                  "direct_minus_refined_mae_mm": 0.535353919259863,
+                  "patient_bootstrap_ci95_low_mm": 0.41407734408640695,
+                  "patient_bootstrap_ci95_high_mm": 0.6578476462451751,
+                  "improvement_probability": 1.0
+                }
+              },
+              "calibration": {
+                "patients": 45,
+                "relations": 346,
+                "direct": {
+                  "mae_mm": 1.6275074178772855,
+                  "median_ae_mm": 1.0352501273155212,
+                  "p90_ae_mm": 2.991890639066696,
+                  "p95_ae_mm": 4.244741916656494,
+                  "bias_mm": -0.7094833432249941,
+                  "pearson_r": 0.5956400945648805
+                },
+                "refined": {
+                  "mae_mm": 1.018067768457308,
+                  "median_ae_mm": 0.558612585067749,
+                  "p90_ae_mm": 1.8559273481369019,
+                  "p95_ae_mm": 2.5446715354919434,
+                  "bias_mm": -0.2870735402913452,
+                  "pearson_r": 0.8026888258159373
+                },
+                "paired": {
+                  "direct_minus_refined_mae_mm": 0.6094396494199775,
+                  "patient_bootstrap_ci95_low_mm": 0.468537070028942,
+                  "patient_bootstrap_ci95_high_mm": 0.7620938870140593,
+                  "improvement_probability": 1.0
+                }
+              },
+              "test": {
+                "patients": 49,
+                "relations": 358,
+                "direct": {
+                  "mae_mm": 1.372971980390269,
+                  "median_ae_mm": 1.12021803855896,
+                  "p90_ae_mm": 2.9448029160499574,
+                  "p95_ae_mm": 3.357981818914411,
+                  "bias_mm": -0.13259409713512027,
+                  "pearson_r": 0.6706290879060546
+                },
+                "refined": {
+                  "mae_mm": 0.836226513557261,
+                  "median_ae_mm": 0.6827201843261719,
+                  "p90_ae_mm": 1.7276790380477907,
+                  "p95_ae_mm": 2.1239791750907884,
+                  "bias_mm": 0.2708070768907083,
+                  "pearson_r": 0.8911703052687807
+                },
+                "paired": {
+                  "direct_minus_refined_mae_mm": 0.5367454668330081,
+                  "patient_bootstrap_ci95_low_mm": 0.4063623844898395,
+                  "patient_bootstrap_ci95_high_mm": 0.6724166602121924,
+                  "improvement_probability": 1.0
+                }
+              }
+            }
+          }
+        ],
+        "aggregate": {
+          "validation": {
+            "direct_mae_mm": {
+              "mean": 1.402241246389278,
+              "std": 0.03590475718522525
+            },
+            "relmeasure3d_mae_mm": {
+              "mean": 0.926469364311051,
+              "std": 0.027321093208173927
+            },
+            "relative_mae_improvement_percent": 33.929388634325434,
+            "direct_p95_ae_mm": {
+              "mean": 3.3287026584148407,
+              "std": 0.12014437398756643
+            },
+            "relmeasure3d_p95_ae_mm": {
+              "mean": 2.346730222304662,
+              "std": 0.11570956461428915
+            }
+          },
+          "calibration": {
+            "direct_mae_mm": {
+              "mean": 1.5942066109421624,
+              "std": 0.06692890057910199
+            },
+            "relmeasure3d_mae_mm": {
+              "mean": 1.0748351930760867,
+              "std": 0.05011841635223337
+            },
+            "relative_mae_improvement_percent": 32.57867670986082,
+            "direct_p95_ae_mm": {
+              "mean": 4.167788982391357,
+              "std": 0.15047051866531375
+            },
+            "relmeasure3d_p95_ae_mm": {
+              "mean": 2.7294302781422934,
+              "std": 0.4262799707077633
+            }
+          },
+          "test": {
+            "direct_mae_mm": {
+              "mean": 1.3856064953756289,
+              "std": 0.011634294477221292
+            },
+            "relmeasure3d_mae_mm": {
+              "mean": 0.8591899801014439,
+              "std": 0.01989637889030004
+            },
+            "relative_mae_improvement_percent": 37.991775950175295,
+            "direct_p95_ae_mm": {
+              "mean": 3.402207714319228,
+              "std": 0.1710136763653058
+            },
+            "relmeasure3d_p95_ae_mm": {
+              "mean": 2.283347884813944,
+              "std": 0.139054284109294
+            }
+          }
+        }
+      }
+    }
+  }
+}

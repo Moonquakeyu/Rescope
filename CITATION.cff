@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the RelScope manuscript."
+title: "RelScope: measurement-critical geometry for reliable 3D anatomical quantification"
+type: software
+authors:
+  - family-names: Wei
+    given-names: Xindi
+  - family-names: Miao
+    given-names: Peiang
+  - family-names: Lai
+    given-names: Hongchang
+  - family-names: Shi
+    given-names: Junyu
+repository-code: "https://github.com/Moonquakeyu/Rescope"
+license: MIT
+version: 0.1.0
+date-released: 2026-09-01
